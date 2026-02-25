@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- SEO -->
+    <title>Konnex — Atendimento, CRM e Automação WhatsApp em Uma Plataforma</title>
+    <meta name="description"
+        content="Centralize WhatsApp, Instagram, Telegram e mais em um painel único. Chatbot com IA e CRM completo. A partir de R$55/mês.">
+    <link rel="canonical" href="https://konnex.app/">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Konnex — CRM e Automação WhatsApp Multi-Canal">
+    <meta property="og:description"
+        content="Automatize atendimento, vendas e follow-ups pelo WhatsApp. Multicanal com IA integrada. Comece grátis.">
+    <meta property="og:image" content="https://konnex.app/og-image.png">
+    <meta property="og:url" content="https://konnex.app/">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" as="style"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Syne:wght@700;800&display=swap">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Syne:wght@700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Schema.org -->
+    <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "SoftwareApplication",
+        "name": "Konnex",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Web",
+        "description": "Plataforma de CRM, automação WhatsApp e atendimento multicanal com IA.",
+        "offers": [
+          { "@type": "Offer", "price": "0", "priceCurrency": "BRL", "name": "Gratuito" },
+          { "@type": "Offer", "price": "55", "priceCurrency": "BRL", "name": "Premium Pix" },
+          { "@type": "Offer", "price": "60", "priceCurrency": "BRL", "name": "Premium Cartão" }
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          { "@type": "Question", "name": "Posso usar sem cartão de crédito?", "acceptedAnswer": { "@type": "Answer", "text": "Sim. A versão gratuita não exige cartão. O plano premium é R$55/mês no Pix." } }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+
+<body>
+
+    <!-- ===== SKIP LINK (A11Y) ===== -->
+    <a href="#main-content" class="skip-link">Pular para o conteúdo</a>
+
+    <!-- ===== NAV ===== -->
+    <header class="header" id="header" role="banner">
+        <div class="header-pill">
+            <a href="#" class="logo" aria-label="Konnex — voltar ao topo">
+                <span class="logo-text">Kon<span>nex</span></span>
+            </a>
+
+            <nav aria-label="Navegação principal">
+                <ul class="nav-links" role="list">
+                    <li><a href="#features">Funcionalidades</a></li>
+                    <li><a href="#cases">Para quem é</a></li>
+                    <li><a href="#pricing">Preços</a></li>
+                    <li><a href="/whitelabel">White-Label</a></li>
+                    <li><a href="#faq">FAQ</a></li>
+                </ul>
+            </nav>
+
+            <div class="header-actions">
+                <a href="https://app.usekonnex.com" class="header-login" id="cta-header-login" data-cta="header-login"
+                    target="_blank" rel="noopener">Entrar</a>
+                <a href="#pricing" class="header-cta" id="cta-header" data-cta="header">Se cadastrar</a>
+                <button class="mobile-toggle" id="mobileToggle" aria-label="Abrir menu" aria-expanded="false"
+                    aria-controls="mobileMenu">
+                    <span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile menu overlay (outside header so position:fixed inset:0 works correctly) -->
+    <div class="mobile-menu" id="mobileMenu" aria-hidden="true" role="dialog" aria-label="Menu mobile">
+        <ul role="list">
+            <li><a href="#features">Funcionalidades</a></li>
+            <li><a href="#cases">Para quem é</a></li>
+            <li><a href="#pricing">Preços</a></li>
+            <li><a href="/whitelabel">White-Label</a></li>
+            <li><a href="#faq">FAQ</a></li>
+        </ul>
+        <a href="https://app.usekonnex.com" class="btn-ghost" target="_blank" rel="noopener"
+            style="width:100%;max-width:280px;text-align:center;">Entrar na plataforma</a>
+        <a href="#pricing" class="btn-primary" data-cta="mobile-menu" id="cta-mobile-menu">Se cadastrar agora</a>
+    </div>
+
+    <!-- ===== MAIN ===== -->
+    <main id="main-content">
+
+        <!-- ===== HERO ===== -->
+        <section class="hero" id="hero" aria-labelledby="hero-headline">
+            <div class="hero-bg" aria-hidden="true">
+                <div class="orb orb-1"></div>
+                <div class="orb orb-2"></div>
+                <div class="orb orb-3"></div>
+                <div class="grid-overlay"></div>
+            </div>
+
+            <div class="container">
+                <div class="hero-grid">
+
+                    <div class="hero-content">
+                        <!-- Eyebrow — urgência social e credibilidade -->
+                        <div class="hero-badge">
+                            <span class="pulse" aria-hidden="true"></span>
+                            Plataforma multicanal com WhatsApp e integrações
+                        </div>
+
+                        <!-- Headline: resultado específico para ICP -->
+                        <h1 class="hero-headline" id="hero-headline">
+                            Escale Vendas e Atendimento no WhatsApp<br>
+                            <span class="text-gradient">sem perder o controle</span>
+                        </h1>
+
+                        <!-- Sub: expande benefício + prova implícita -->
+                        <p class="hero-sub">
+                            CRM integrado, IA nativa e campanhas automatizadas.
+                            Descentralize a operação e multiplique a receita das suas equipes a partir de
+                            <strong>R$97/mês</strong>.
+                        </p>
+
+                        <!-- CTAs -->
+                        <div class="hero-actions">
+                            <a href="#pricing" class="btn-primary btn-lg" id="cta-hero-primary" data-cta="hero-primary">
+                                Criar minha conta agora
+                            </a>
+                            <a href="#features" class="btn-ghost btn-lg" id="cta-hero-secondary"
+                                data-cta="hero-secondary">
+                                Ver funcionalidades
+                            </a>
+                        </div>
+
+                        <!-- Micro-copy — remove fricção -->
+                        <p class="hero-microcopy">
+                            Setup em 2 minutos &middot; Sem taxa de setup &middot; Suporte C-Level incluso
+                        </p>
+
+                        <!-- Social proof rápida -->
+                        <div class="hero-proof">
+                            <div class="proof-avatars" aria-label="Usuários recentes">
+                                <div class="avatar av1" aria-hidden="true">JP</div>
+                                <div class="avatar av2" aria-hidden="true">ML</div>
+                                <div class="avatar av3" aria-hidden="true">RS</div>
+                                <div class="avatar av4" aria-hidden="true">CA</div>
+                            </div>
+                            <p><strong>+2.500 empresas</strong> ativas no Brasil usando a plataforma agora</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== LOGOS / INTEGRAÇÕES ===== -->
+        <section class="integrations" aria-label="Integrações disponíveis">
+            <div class="container">
+                <p class="integrations-label">Integrado com as ferramentas que você já usa</p>
+                <div class="integrations-row" role="list">
+                    <div class="integration-item" role="listitem">
+                        <div class="int-logo" aria-hidden="true" style="color: #25D366;"><i
+                                class="ph-fill ph-whatsapp-logo"></i></div>
+                        <span>WhatsApp API</span>
+                    </div>
+                    <div class="integration-item" role="listitem">
+                        <div class="int-logo" aria-hidden="true" style="color: #1877F2;"><i
+                                class="ph-fill ph-facebook-logo"></i></div>
+                        <span>Facebook</span>
+                    </div>
+                    <div class="integration-item" role="listitem">
+                        <div class="int-logo" aria-hidden="true" style="color: #E1306C;"><i
+                                class="ph-fill ph-instagram-logo"></i></div>
+                        <span>Instagram</span>
+                    </div>
+                    <div class="integration-item" role="listitem">
+                        <div class="int-logo" aria-hidden="true" style="color: #0088cc;"><i
+                                class="ph-fill ph-telegram-logo"></i></div>
+                        <span>Telegram</span>
+                    </div>
+                    <div class="integration-item" role="listitem">
+                        <div class="int-logo" aria-hidden="true" style="color: #10a37f;"><i
+                                class="ph-fill ph-robot"></i></div>
+                        <span>ChatGPT</span>
+                    </div>
+                    <div class="integration-item" role="listitem">
+                        <div class="int-logo" aria-hidden="true" style="color: #ea4335;"><i
+                                class="ph-fill ph-share-network"></i></div>
+                        <span>N8N</span>
+                    </div>
+                    <div class="integration-item" role="listitem">
+                        <div class="int-logo" aria-hidden="true" style="color: #3b82f6;"><i
+                                class="ph-fill ph-chat-circle-dots"></i></div>
+                        <span>TypeBot</span>
+                    </div>
+                    <div class="integration-item" role="listitem">
+                        <div class="int-logo" aria-hidden="true" style="color: #009ee3;"><i
+                                class="ph-fill ph-credit-card"></i></div>
+                        <span>Mercado Pago</span>
+                    </div>
+                    <div class="integration-item" role="listitem">
+                        <div class="int-logo" aria-hidden="true" style="color: #635bff;"><i
+                                class="ph-fill ph-stripe-logo"></i></div>
+                        <span>Stripe</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== PROBLEMA (Agitação de Dor) ===== -->
+        <section class="problem" id="problem" aria-labelledby="problem-title">
+            <!-- Decorative blur orbs for parallax -->
+            <div class="section-orb section-orb--a" data-px="slow" aria-hidden="true"></div>
+            <div class="section-orb section-orb--b" data-px="mid" aria-hidden="true"></div>
+            <div class="container">
+                <div class="problem-grid">
+                    <div class="problem-content">
+                        <span class="section-label">O Custo do Caos</span>
+                        <h2 id="problem-title">Operar canais de forma descentralizada destrói 40% das suas oportunidades
+                            de venda.</h2>
+                        <p>Conversas fragmentadas em aparelhos diferentes, funis soltos e dependência manual para cada
+                            qualificação.</p>
+                        <p>Enquanto a sua equipe tenta responder a todos, a concorrência automatiza follow-ups e fecha o
+                            contrato antes de você digitar "Olá".</p>
+                        <div class="problem-stats">
+                            <div class="pstat">
+                                <span class="pstat-num">78%</span>
+                                <span class="pstat-label">dos clientes esperam resposta em até 5 minutos nas redes
+                                    sociais</span>
+                            </div>
+                            <div class="pstat">
+                                <span class="pstat-num">21×</span>
+                                <span class="pstat-label">mais chances de qualificar um lead respondendo em menos de 5
+                                    min vs 30 min</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="problem-visual">
+                        <img src="mockup-dashboard.png"
+                            alt="Dashboard Konnex — caixa de entrada unificada com WhatsApp, Instagram e Telegram"
+                            class="problem-phone-img" loading="lazy" draggable="false" />
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== FEATURES ===== -->
+        <section class="features" id="features" aria-labelledby="features-title">
+            <!-- Decorative blur orbs -->
+            <div class="section-orb section-orb--c" data-px="slow" aria-hidden="true"></div>
+            <div class="section-orb section-orb--d" data-px="fast" aria-hidden="true"></div>
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-label">Funcionalidades</span>
+                    <h2 id="features-title">Tudo que você precisa para atender, vender e crescer</h2>
+                    <p>Do primeiro contato ao pós-venda — automatizado, centralizado e com a sua marca.</p>
+                </div>
+
+                <!-- Bento Grid — 4x2 uniform cards -->
+                <div class="bento-grid bento-grid--uniform">
+
+                    <!-- 1 -->
+                    <div class="bento-card" data-feature="unified">
+                        <div class="bento-icon" aria-hidden="true"><i class="ph-fill ph-tray"></i></div>
+                        <h3>Caixa de Entrada Unificada</h3>
+                        <p>WhatsApp (oficial e Plus), Instagram, Facebook, Telegram e WebChat — tudo em um painel. Sem
+                            trocar de aba.</p>
+                        <div class="bento-tags">
+                            <span class="tag">Multi-canal</span>
+                            <span class="tag">Multi-agente</span>
+                        </div>
+                    </div>
+
+                    <!-- 2 -->
+                    <div class="bento-card" data-feature="chatbot">
+                        <div class="bento-icon" aria-hidden="true"><i class="ph-fill ph-robot"></i></div>
+                        <h3>Chatbot com IA</h3>
+                        <p>Configure bots por departamento que entendem contexto, respondem com mídia e transferem para
+                            humanos quando necessário.</p>
+                    </div>
+
+                    <!-- 3 -->
+                    <div class="bento-card" data-feature="crm">
+                        <div class="bento-icon" aria-hidden="true"><i class="ph-fill ph-users-three"></i></div>
+                        <h3>CRM e Gestão de Contatos</h3>
+                        <p>Captura automática de leads, tags por segmento, notas internas e variáveis dinâmicas como
+                            <code>{nome}</code> em campanhas personalizadas.
+                        </p>
+                    </div>
+
+                    <!-- 4 -->
+                    <div class="bento-card" data-feature="automation">
+                        <div class="bento-icon" aria-hidden="true"><i class="ph-fill ph-lightning"></i></div>
+                        <h3>Automação e Campanhas</h3>
+                        <p>Sequências de follow-up, campanhas de marketing e disparo por API. Automatize o que consome
+                            horas da sua equipe.</p>
+                    </div>
+
+                    <!-- 5 -->
+                    <div class="bento-card" data-feature="kanban">
+                        <div class="bento-icon" aria-hidden="true"><i class="ph-fill ph-kanban"></i></div>
+                        <h3>Kanban de Atendimento</h3>
+                        <p>Visualize tickets em quadro Kanban, separe por filas por departamento e acompanhe SLA de
+                            resposta em tempo real.</p>
+                    </div>
+
+                    <!-- 6 -->
+                    <div class="bento-card" data-feature="transcription">
+                        <div class="bento-icon" aria-hidden="true"><i class="ph-fill ph-microphone-stage"></i></div>
+                        <h3>Transcrição de Áudio</h3>
+                        <p>Mensagens de voz transcritas automaticamente. Nunca mais perca informação de cliente em um
+                            áudio de 3 minutos.</p>
+                    </div>
+
+                    <!-- 7 -->
+                    <div class="bento-card" data-feature="integrations">
+                        <div class="bento-icon" aria-hidden="true"><i class="ph-fill ph-plugs-connected"></i></div>
+                        <h3>Integrações Nativas</h3>
+                        <p>N8N, TypeBot, ChatGPT, Groq, IXC, SGP, Hubsoft. Gateways: Mercado Pago, Stripe, Asas, EFI.
+                            Webhooks para qualquer sistema.</p>
+                        <div class="bento-tags">
+                            <span class="tag">API aberta</span>
+                            <span class="tag">N8N nativo</span>
+                        </div>
+                    </div>
+
+                    <!-- 8 (novo card para par) -->
+                    <div class="bento-card" data-feature="reports">
+                        <div class="bento-icon" aria-hidden="true"><i class="ph-fill ph-chart-bar"></i></div>
+                        <h3>Relatórios e Analytics</h3>
+                        <p>Dashboards de atendimento, tempo médio de resposta, taxa de conversão e relatórios exportados
+                            em PDF automático.</p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== META OFFICIAL API ===== -->
+        <section class="meta-api" id="meta-api" aria-labelledby="meta-api-title">
+            <div class="container">
+
+                <!-- Hero grid: copy left · badge + compare right -->
+                <div class="meta-api-grid">
+
+                    <!-- Left — copy only, no CTA -->
+                    <div class="meta-api-content">
+                        <div class="meta-badge-row">
+                            <div class="meta-verified-badge" aria-label="Empresa verificada pela Meta">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                    <circle cx="12" cy="12" r="11" fill="#1877F2" />
+                                    <path d="M7 12.5l3.5 3.5 6.5-7" stroke="#fff" stroke-width="2.2"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                                <span>API Oficial Meta &bull; WhatsApp Business</span>
+                            </div>
+                        </div>
+
+                        <span class="section-label meta-label">Mais estabilidade. Mais escala.</span>
+                        <h2 id="meta-api-title">Chega de instabilidade — opere com a API Oficial da Meta.</h2>
+                        <p>O Konnex suporta tanto a API não-oficial quanto a <strong>API Oficial do WhatsApp
+                                Business</strong>, homologada diretamente pela Meta. Se você quer mais estabilidade,
+                            escala para transacionar <strong>milhares de conversas simultâneas</strong> e operar como
+                            empresa verificada, a API Oficial é o próximo passo.</p>
+                    </div>
+
+                    <!-- Right — badge + comparison below it -->
+                    <div class="meta-api-visual-col">
+                        <div class="meta-badge-img-wrap">
+                            <img src="https://www.notifiquei.com.br/meta-partner.svg" alt="Meta Business Partner"
+                                class="meta-badge-img" width="340" loading="lazy">
+                        </div>
+
+                        <div class="meta-compare" style="margin-top:20px;margin-bottom:0;">
+                            <div class="meta-compare-col meta-compare-col--danger">
+                                <div class="meta-compare-header">
+                                    <i class="ph-fill ph-x-circle" aria-hidden="true"></i>
+                                    API não-oficial
+                                </div>
+                                <ul>
+                                    <li>Instabilidade e quedas sem aviso</li>
+                                    <li>Número pessoal em risco</li>
+                                    <li>Sem suporte da plataforma</li>
+                                    <li>Escala limitada a poucos contatos</li>
+                                </ul>
+                            </div>
+                            <div class="meta-compare-col meta-compare-col--safe">
+                                <div class="meta-compare-header">
+                                    <i class="ph-fill ph-check-circle" aria-hidden="true"></i>
+                                    API Oficial Meta
+                                </div>
+                                <ul>
+                                    <li>Muito mais estabilidade operacional</li>
+                                    <li>Número empresarial verificado</li>
+                                    <li>SLA e suporte direto da Meta</li>
+                                    <li>Milhares de conversas simultâneas</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                </div><!-- /grid -->
+
+                <!-- CTA centralizado abaixo de tudo -->
+                <div style="text-align:center;margin-top:40px;">
+                    <a href="#pricing" class="btn-primary" style="display:inline-flex;gap:8px;align-items:center;">
+                        <i class="ph-fill ph-rocket-launch" aria-hidden="true"></i>
+                        Quero começar agora
+                    </a>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- ===== CASES / PARA QUEM É ===== -->
+        <section class="cases" id="cases" aria-labelledby="cases-title">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-label">Para quem é</span>
+                    <h2 id="cases-title">Funciona para qualquer tipo de negócio</h2>
+                    <p>Do varejo local à agência de automação. O Konnex se adapta ao seu modelo.</p>
+                </div>
+
+                <div class="cases-grid">
+                    <article class="case-card" aria-label="E-commerce e varejo">
+                        <div class="case-icon" aria-hidden="true"><i class="ph-fill ph-shopping-cart-simple"></i></div>
+                        <h3>E-commerce e Varejo</h3>
+                        <p>Recupere carrinhos abandonados automaticamente. "Ei {nome}, ainda tem interesse? Aqui está
+                            seu desconto de 10%." Follow-up que vende enquanto você dorme.</p>
+                        <div class="case-result">
+                            <span class="result-metric">+280%</span>
+                            <span class="result-label">vendas recuperadas por e-commerces usando follow-up
+                                automático</span>
+                        </div>
+                    </article>
+
+                    <article class="case-card" aria-label="Clínicas e saúde">
+                        <div class="case-icon" aria-hidden="true"><i class="ph-fill ph-first-aid-kit"></i></div>
+                        <h3>Clínicas e Saúde</h3>
+                        <p>Confirmação automática de consultas, lembretes 24h antes, pós-consulta para avaliação de
+                            atendimento. Um agente virtual cuida da agenda enquanto sua recepcionista foca no essencial.
+                        </p>
+                        <div class="case-result">
+                            <span class="result-metric">-65%</span>
+                            <span class="result-label">no-shows com confirmação automatizada via WhatsApp</span>
+                        </div>
+                    </article>
+
+                    <article class="case-card" aria-label="Restaurantes e delivery">
+                        <div class="case-icon" aria-hidden="true"><i class="ph-fill ph-hamburger"></i></div>
+                        <h3>Restaurantes e Delivery</h3>
+                        <p>Cardápio interativo com botões, confirmação de pedido automática e rastreamento de entrega em
+                            tempo real via WhatsApp. Integração direta com Mercado Pago no chat.</p>
+                        <div class="case-result">
+                            <span class="result-metric">+180%</span>
+                            <span class="result-label">pedidos processados sem intervenção humana</span>
+                        </div>
+                    </article>
+
+                    <article class="case-card" aria-label="Agências e revendedores">
+                        <div class="case-icon" aria-hidden="true"><i class="ph-fill ph-briefcase"></i></div>
+                        <h3>Agências e Revendedores</h3>
+                        <p>Ofereça o Konnex como "Seu CRM WhatsApp" para seus clientes locais. Defina seus preços, cobre
+                            mensalidades e <strong>gerencie tudo em um só lugar</strong>. Sistema completo com seu
+                            domínio e logo, sem qualquer referência ao Konnex.</p>
+                        <div class="case-result">
+                            <span class="result-metric">White-Label</span>
+                            <span class="result-label">100% da sua marca — domínio, logo e preços seus</span>
+                        </div>
+                    </article>
+
+                    <article class="case-card" aria-label="Imobiliárias">
+                        <div class="case-icon" aria-hidden="true"><i class="ph-fill ph-buildings"></i></div>
+                        <h3>Imobiliárias</h3>
+                        <p>Qualifique leads de anúncios automaticamente, agende visitas sem interação manual e acompanhe
+                            o funil completo no CRM com Kanban visual.</p>
+                        <div class="case-result">
+                            <span class="result-metric">+200%</span>
+                            <span class="result-label">leads qualificados com pipeline automatizado</span>
+                        </div>
+                    </article>
+
+                    <article class="case-card" aria-label="Serviços profissionais">
+                        <div class="case-icon" aria-hidden="true"><i class="ph-fill ph-graduation-cap"></i></div>
+                        <h3>Serviços e Educação</h3>
+                        <p>Matrículas automatizadas, comunicação com alunos personalizados com variáveis
+                            <code>{nome}</code>, avaliação pós-atendimento e multi-agentes por departamento.
+                        </p>
+                        <div class="case-result">
+                            <span class="result-metric">+150%</span>
+                            <span class="result-label">conversão de leads em matrículas com automação</span>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== PROVA SOCIAL — TICKER ===== -->
+        <section class="social-proof" aria-labelledby="proof-title" aria-label="Depoimentos de clientes">
+            <div class="ticker-header container">
+                <span class="section-label">Depoimentos</span>
+                <h2 id="proof-title">Empresas que já transformaram seu atendimento</h2>
+            </div>
+            <!-- Full-width ticker — no container so it bleeds edge-to-edge -->
+            <div class="ticker-wrapper" aria-hidden="true">
+                <div class="ticker-track">
+
+                    <!-- ── Original set ── -->
+                    <div class="ticker-card">
+                        <blockquote>
+                            <p>"Reduzimos o tempo de resposta de 2 horas para 3 minutos. No primeiro mês o faturamento
+                                escalou 42%."</p>
+                        </blockquote>
+                        <div class="ticker-author">
+                            <img src="https://i.pravatar.cc/100?img=32" alt="" width="36" height="36">
+                            <div>
+                                <strong>Patrícia Gomes</strong>
+                                <span>Diretora Comercial · Saúde Digital</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ticker-card">
+                        <blockquote>
+                            <p>"Antes usava 4 ferramentas e ainda perdia conversas. Com o Konnex centralizei tudo e o
+                                time economiza 3h por dia."</p>
+                        </blockquote>
+                        <div class="ticker-author">
+                            <img src="https://i.pravatar.cc/100?img=11" alt="" width="36" height="36">
+                            <div>
+                                <strong>Rafael Souza</strong>
+                                <span>CEO · E-commerce Moda</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ticker-card">
+                        <blockquote>
+                            <p>"Implementei o Konnex para 12 clientes da minha agência em menos de uma semana, cada um
+                                com sua própria marca."</p>
+                        </blockquote>
+                        <div class="ticker-author">
+                            <img src="https://i.pravatar.cc/100?img=68" alt="" width="36" height="36">
+                            <div>
+                                <strong>Camila Ferreira</strong>
+                                <span>Fundadora · Agência AutoFlux</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ticker-card">
+                        <blockquote>
+                            <p>"Em 2 semanas zeramos as mensagens não respondidas. Nossa taxa de fechamento subiu 31% no
+                                trimestre."</p>
+                        </blockquote>
+                        <div class="ticker-author">
+                            <img src="https://i.pravatar.cc/100?img=57" alt="" width="36" height="36">
+                            <div>
+                                <strong>Marcos Andrade</strong>
+                                <span>Gerente Comercial · Imobiliária Solaris</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ticker-card">
+                        <blockquote>
+                            <p>"Nosso chatbot responde leads de madrugada e agenda consultas sem intervenção humana.
+                                Revolucionou a clínica."</p>
+                        </blockquote>
+                        <div class="ticker-author">
+                            <img src="https://i.pravatar.cc/100?img=44" alt="" width="36" height="36">
+                            <div>
+                                <strong>Dra. Fernanda Leal</strong>
+                                <span>Diretora · Clínica Bem-Estar</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ── Clones for seamless loop ── -->
+                    <div class="ticker-card" aria-hidden="true">
+                        <blockquote>
+                            <p>"Reduzimos o tempo de resposta de 2 horas para 3 minutos. No primeiro mês o faturamento
+                                escalou 42%."</p>
+                        </blockquote>
+                        <div class="ticker-author">
+                            <img src="https://i.pravatar.cc/100?img=32" alt="" width="36" height="36">
+                            <div>
+                                <strong>Patrícia Gomes</strong>
+                                <span>Diretora Comercial · Saúde Digital</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ticker-card" aria-hidden="true">
+                        <blockquote>
+                            <p>"Antes usava 4 ferramentas e ainda perdia conversas. Com o Konnex centralizei tudo e o
+                                time economiza 3h por dia."</p>
+                        </blockquote>
+                        <div class="ticker-author">
+                            <img src="https://i.pravatar.cc/100?img=11" alt="" width="36" height="36">
+                            <div>
+                                <strong>Rafael Souza</strong>
+                                <span>CEO · E-commerce Moda</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ticker-card" aria-hidden="true">
+                        <blockquote>
+                            <p>"Implementei o Konnex para 12 clientes da minha agência em menos de uma semana, cada um
+                                com sua própria marca."</p>
+                        </blockquote>
+                        <div class="ticker-author">
+                            <img src="https://i.pravatar.cc/100?img=68" alt="" width="36" height="36">
+                            <div>
+                                <strong>Camila Ferreira</strong>
+                                <span>Fundadora · Agência AutoFlux</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ticker-card" aria-hidden="true">
+                        <blockquote>
+                            <p>"Em 2 semanas zeramos as mensagens não respondidas. Nossa taxa de fechamento subiu 31% no
+                                trimestre."</p>
+                        </blockquote>
+                        <div class="ticker-author">
+                            <img src="https://i.pravatar.cc/100?img=57" alt="" width="36" height="36">
+                            <div>
+                                <strong>Marcos Andrade</strong>
+                                <span>Gerente Comercial · Imobiliária Solaris</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ticker-card" aria-hidden="true">
+                        <blockquote>
+                            <p>"Nosso chatbot responde leads de madrugada e agenda consultas sem intervenção humana.
+                                Revolucionou a clínica."</p>
+                        </blockquote>
+                        <div class="ticker-author">
+                            <img src="https://i.pravatar.cc/100?img=44" alt="" width="36" height="36">
+                            <div>
+                                <strong>Dra. Fernanda Leal</strong>
+                                <span>Diretora · Clínica Bem-Estar</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div><!-- /track -->
+            </div><!-- /wrapper -->
+        </section>
+
+        <!-- ===== PRICING ===== -->
+        <section class="pricing" id="pricing" aria-labelledby="pricing-title" style="margin-top: 40px;">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-label">Planos e Preços</span>
+                    <h2 id="pricing-title">O Roi Paga o Software no Primeiro Dia.</h2>
+                    <p>Substitua 4 ferramentas caras por uma. Sem taxas escondidas. Cancele com 1 clique.</p>
+                </div>
+
+                <div class="pricing-grid pricing-grid--3">
+
+                    <!-- Plano Basic -->
+                    <article class="pricing-card" aria-label="Plano Basic">
+                        <header class="pricing-header">
+                            <h3>Basic</h3>
+                            <div class="price">
+                                <span class="price-value">R$97</span>
+                                <span class="price-period">/mês</span>
+                            </div>
+                            <p class="pricing-sub">Para começar a automatizar seu atendimento</p>
+                        </header>
+                        <hr class="pricing-divider">
+                        <ul class="pricing-features" aria-label="O que está incluído no plano Basic">
+                            <li><span class="check" aria-hidden="true">✓</span> Acesso completo à plataforma</li>
+                            <li><span class="check" aria-hidden="true">✓</span> Multicanal: WhatsApp, Instagram,
+                                Telegram</li>
+                            <li><span class="check" aria-hidden="true">✓</span> CRM e gestão de contatos</li>
+                            <li><span class="check" aria-hidden="true">✓</span> Chatbot e automações</li>
+                            <li><span class="check" aria-hidden="true">✓</span> Suporte por chat</li>
+                        </ul>
+                        <a href="#contact" class="btn-outline btn-full" id="cta-pricing-basic" data-cta="pricing-basic"
+                            aria-label="Criar conta no plano Basic"
+                            style="display: flex; flex-direction: column; align-items: center; padding: 10px 24px; text-align: center;">
+                            <span style="display: block; font-weight: 700;">Criar minha conta</span>
+                            <span style="font-size: 0.75rem; font-weight: 400; opacity: 0.8; margin-top: 2px;">Setup em
+                                2 minutos</span>
+                        </a>
+                        <p class="pricing-guarantee"
+                            style="display: flex; align-items: center; justify-content: center; gap: 6px;"><i
+                                class="ph-fill ph-check-circle" style="color: var(--emerald);"></i> Sem taxa de setup
+                        </p>
+                    </article>
+
+                    <!-- Plano Premium (FEATURED) -->
+                    <article class="pricing-card pricing-card--featured" aria-label="Plano Premium — Mais popular">
+                        <div class="pricing-badge" aria-label="Plano mais popular">Mais popular</div>
+                        <header class="pricing-header">
+                            <h3>Premium</h3>
+                            <div class="price">
+                                <span class="price-value">R$297</span>
+                                <span class="price-period">/mês no Pix</span>
+                            </div>
+                            <p class="pricing-sub">Ou R$330/mês no cartão de crédito</p>
+                        </header>
+                        <hr class="pricing-divider">
+                        <ul class="pricing-features" aria-label="O que está incluído no plano Premium">
+                            <li><span class="check" aria-hidden="true">✓</span> <strong>Tudo do Gratuito</strong></li>
+                            <li><span class="check" aria-hidden="true">✓</span> Sem anúncios Konnex</li>
+                            <li><span class="check" aria-hidden="true">✓</span> 1 canal grátis para testes</li>
+                            <li><span class="check" aria-hidden="true">✓</span> Canais adicionais a partir de R$5/mês
+                            </li>
+                            <li><span class="check" aria-hidden="true">✓</span> Transcrição de áudio com IA</li>
+                            <li><span class="check" aria-hidden="true">✓</span> Relatórios em PDF + Kanban</li>
+                            <li><span class="check" aria-hidden="true">✓</span> Atualizações automáticas</li>
+                        </ul>
+                        <a href="#contact" class="btn-primary btn-full" id="cta-pricing-premium"
+                            data-cta="pricing-premium" aria-label="Assinar plano Premium"
+                            style="display: flex; flex-direction: column; align-items: center; padding: 10px 24px; text-align: center;">
+                            <span style="display: block; font-weight: 700;">Assinar Premium &mdash; R$297/mês</span>
+                            <span style="font-size: 0.75rem; font-weight: 400; opacity: 0.8; margin-top: 2px;">Liberação
+                                Imediata &bull; Garantia de 7 Dias</span>
+                        </a>
+                        <p class="pricing-guarantee"
+                            style="display: flex; align-items: center; justify-content: center; gap: 6px;"><i
+                                class="ph-fill ph-shield-check" style="color: var(--emerald-light);"></i> Teste Sem
+                            Riscos. Cancele com 1 clique</p>
+                    </article>
+
+                    <!-- Plano Implementação Black -->
+                    <article class="pricing-card pricing-card--black" aria-label="Plano Implementação Black">
+                        <!-- Black ribbon badge -->
+                        <div class="pricing-ribbon" aria-label="Implementação assistida">
+                            <i class="ph-fill ph-crown" aria-hidden="true"></i>
+                            Black
+                        </div>
+                        <header class="pricing-header">
+                            <h3 style="color: #fff;">Implementação Black</h3>
+                            <div class="price">
+                                <span class="price-value" style="color: var(--emerald-light);">R$697</span>
+                                <span class="price-period" style="color: rgba(255,255,255,0.6);">/único</span>
+                            </div>
+                            <p class="pricing-sub" style="color: rgba(255,255,255,0.65);">Premium incluso no 1º mês.
+                                Implementação guiada C-Level.</p>
+                        </header>
+                        <hr class="pricing-divider" style="border-color: rgba(255,255,255,0.12);">
+                        <ul class="pricing-features" aria-label="O que está incluído no plano Black">
+                            <li style="color: rgba(255,255,255,0.9);"><span class="check" aria-hidden="true">✓</span>
+                                <strong>Tudo do Premium</strong>
+                            </li>
+                            <li style="color: rgba(255,255,255,0.9);"><span class="check" aria-hidden="true">✓</span>
+                                Onboarding 1:1 com especialista</li>
+                            <li style="color: rgba(255,255,255,0.9);"><span class="check" aria-hidden="true">✓</span>
+                                Setup completo e configuração de fluxos</li>
+                            <li style="color: rgba(255,255,255,0.9);"><span class="check" aria-hidden="true">✓</span>
+                                Integrações personalizadas (N8N, APIs)</li>
+                            <li style="color: rgba(255,255,255,0.9);"><span class="check" aria-hidden="true">✓</span>
+                                Treinamento da equipe incluso</li>
+                            <li style="color: rgba(255,255,255,0.9);"><span class="check" aria-hidden="true">✓</span> 30
+                                dias de suporte prioritário</li>
+                        </ul>
+                        <a href="#contact" class="btn-primary btn-full" id="cta-pricing-black" data-cta="pricing-black"
+                            aria-label="Adquirir Implementação Black"
+                            style="display: flex; flex-direction: column; align-items: center; padding: 10px 24px; text-align: center; background: linear-gradient(135deg, #1a1a2e, #16213e); border: 1px solid rgba(255,255,255,0.15);">
+                            <span style="display: block; font-weight: 700;">Implementar agora &mdash; R$697</span>
+                            <span style="font-size: 0.75rem; font-weight: 400; opacity: 0.7; margin-top: 2px;">Premium
+                                do 2º mês: R$297/mês</span>
+                        </a>
+                        <p class="pricing-guarantee"
+                            style="display: flex; align-items: center; justify-content: center; gap: 6px; color: rgba(255,255,255,0.65);">
+                            <i class="ph-fill ph-hand-waving" style="color: var(--emerald-light);"></i> Atendimento
+                            exclusivo. Resultado garantido.
+                        </p>
+                    </article>
+
+                </div>
+
+                <!-- Comparação de valor -->
+                <div class="pricing-comparison">
+                    <p class="pricing-comparison-text">
+                        <strong>O ROI paga o investimento em dias.</strong> Enquanto seus concorrentes ainda respondem
+                        manualmente, você já está automatizando e escalando.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== FAQ ===== -->
+        <section class="faq" id="faq" aria-labelledby="faq-title">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-label">Dúvidas frequentes</span>
+                    <h2 id="faq-title">Perguntas frequentes</h2>
+                </div>
+
+                <div class="faq-list" role="list">
+
+                    <div class="faq-item" role="listitem">
+                        <h3>
+                            <button class="faq-trigger" aria-expanded="false" aria-controls="faq-1" id="faq-trigger-1">
+                                O plano gratuito tem limite de mensagens?
+                                <span class="faq-icon" aria-hidden="true">+</span>
+                            </button>
+                        </h3>
+                        <div class="faq-answer" id="faq-1" role="region" aria-labelledby="faq-trigger-1" hidden>
+                            <p>Não. O plano gratuito tem acesso completo a todas as funcionalidades — a única diferença
+                                é que as mensagens enviadas pela plataforma incluem um anúncio do Konnex ao final. No
+                                Premium, esses anúncios são removidos.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item" role="listitem">
+                        <h3>
+                            <button class="faq-trigger" aria-expanded="false" aria-controls="faq-2" id="faq-trigger-2">
+                                Posso usar meu próprio número de WhatsApp?
+                                <span class="faq-icon" aria-hidden="true">+</span>
+                            </button>
+                        </h3>
+                        <div class="faq-answer" id="faq-2" role="region" aria-labelledby="faq-trigger-2" hidden>
+                            <p>Sim. A plataforma suporta a API Oficial do WhatsApp Business e a API Plus (não oficial).
+                                A ativação da API Oficial tem uma taxa de R$120 por canal. Canais adicionais ficam a
+                                partir de R$5/mês no Premium.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item" role="listitem">
+                        <h3>
+                            <button class="faq-trigger" aria-expanded="false" aria-controls="faq-3" id="faq-trigger-3">
+                                O que preciso para instalar a plataforma?
+                                <span class="faq-icon" aria-hidden="true">+</span>
+                            </button>
+                        </h3>
+                        <div class="faq-answer" id="faq-3" role="region" aria-labelledby="faq-trigger-3" hidden>
+                            <p>Uma VPS com Ubuntu 20.04 ou 22.04, mínimo 8 GB de RAM e 4 vCPUs mais um domínio com 2
+                                subdomínios apontando para o IP do servidor. Não funciona em cPanel. Nossa equipe
+                                auxilia na configuração inicial.</p>
+                        </div>
+                    </div>
+
+
+                    <div class="faq-item" role="listitem">
+                        <h3>
+                            <button class="faq-trigger" aria-expanded="false" aria-controls="faq-5" id="faq-trigger-5">
+                                Tem integração com ChatGPT e outros sistemas de IA?
+                                <span class="faq-icon" aria-hidden="true">+</span>
+                            </button>
+                        </h3>
+                        <div class="faq-answer" id="faq-5" role="region" aria-labelledby="faq-trigger-5" hidden>
+                            <p>Sim. O Konnex se integra com ChatGPT, Groq e Open.AI via WebHook para respostas
+                                automáticas com inteligência artificial. Também integra com N8N para automações
+                                avançadas e TypeBot para formulários conversacionais.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item" role="listitem">
+                        <h3>
+                            <button class="faq-trigger" aria-expanded="false" aria-controls="faq-6" id="faq-trigger-6">
+                                E se eu precisar migrar dados ou trocar de plano?
+                                <span class="faq-icon" aria-hidden="true">+</span>
+                            </button>
+                        </h3>
+                        <div class="faq-answer" id="faq-6" role="region" aria-labelledby="faq-trigger-6" hidden>
+                            <p>A migração de dados é um processo simples e sem perda de dados. Upgrades de plano são
+                                gerenciados diretamente pelo painel. A plataforma também conta com backups automáticos
+                                agendados e atualização automática com um único comando.</p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- CTA após FAQ -->
+                <div class="faq-cta">
+                    <p>Ainda tem dúvidas?</p>
+                    <a href="#contact" class="btn-ghost" id="cta-faq" data-cta="faq">Falar com nossa equipe no
+                        WhatsApp</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== CTA FINAL / FORMULÁRIO DE CONTATO ===== -->
+        <section class="cta-final" aria-labelledby="cta-final-title">
+            <div class="container">
+                <div class="cta-final-box">
+                    <div class="cta-form-header">
+                        <span class="section-label"
+                            style="color: var(--emerald-light); border-color: rgba(18,200,122,0.2);">Avaliação
+                            gratuita</span>
+                        <h2 id="cta-final-title">Receba uma diagnóstico gratuito do seu atendimento</h2>
+                        <p>Nosso especialista analisa sua operação atual e mostra exatamente o que está custando vendas
+                            para o seu negócio.</p>
+                    </div>
+
+                    <form class="cta-form" id="contact-form" action="#" method="POST" onsubmit="handleFormSubmit(event)"
+                        novalidate>
+                        <div class="cta-form-fields">
+                            <div class="form-group">
+                                <label for="contact-name">Seu nome</label>
+                                <div class="input-wrapper">
+                                    <i class="ph-fill ph-user" aria-hidden="true"></i>
+                                    <input type="text" id="contact-name" name="name"
+                                        placeholder="Como devemos te chamar?" required autocomplete="given-name" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="contact-whatsapp">Seu WhatsApp</label>
+                                <div class="input-wrapper">
+                                    <i class="ph-fill ph-whatsapp-logo" aria-hidden="true"></i>
+                                    <input type="tel" id="contact-whatsapp" name="whatsapp"
+                                        placeholder="(00) 00000-0000" required autocomplete="tel" inputmode="numeric" />
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-primary btn-lg btn-cta-final" id="cta-form-submit">
+                            <i class="ph-fill ph-whatsapp-logo" aria-hidden="true"></i>
+                            Quero minha avaliação gratuita
+                        </button>
+                        <p class="cta-form-micro">
+                            <i class="ph-fill ph-lock-simple" aria-hidden="true"></i>
+                            Seus dados são confidenciais. Respondemos em até 2 horas.
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer" id="contact" role="contentinfo">
+        <div class="container">
+            <div class="footer-grid">
+
+                <div class="footer-brand">
+                    <a href="#" class="logo" aria-label="Konnex">
+                        <span class="logo-text">Kon<span>nex</span></span>
+                    </a>
+                    <p>Plataforma de CRM, automação WhatsApp e atendimento multicanal com IA. De
+                        microempreendedores a agências de automação.</p>
+                    <div class="footer-contact">
+                        <a href="https://wa.me/5500000000000" class="footer-wa-btn" id="cta-footer-wa"
+                            data-cta="footer-whatsapp" style="display: inline-flex; align-items: center; gap: 8px;">
+                            <i class="ph-fill ph-whatsapp-logo" style="font-size: 1.25rem;"></i> Falar no WhatsApp
+                        </a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4>Produto</h4>
+                    <ul class="footer-links" role="list">
+                        <li><a href="#features">Funcionalidades</a></li>
+                        <li><a href="#pricing">Preços</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                        <li><a href="#">API e Integrações</a></li>
+                        <li><a href="#">Documentação</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4>Segmentos</h4>
+                    <ul class="footer-links" role="list">
+                        <li><a href="#cases">E-commerce</a></li>
+                        <li><a href="#cases">Clínicas e Saúde</a></li>
+                        <li><a href="#cases">Restaurantes</a></li>
+                        <li><a href="#cases">Agências</a></li>
+                        <li><a href="#cases">Imobiliárias</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4>Legal</h4>
+                    <ul class="footer-links" role="list">
+                        <li><a href="#">Política de Privacidade</a></li>
+                        <li><a href="#">Termos de Uso</a></li>
+                        <li><a href="#">LGPD</a></li>
+                    </ul>
+                    <div class="footer-trust">
+                        <span class="trust-badge" style="display: inline-flex; align-items: center; gap: 6px;"><i
+                                class="ph-fill ph-lock-key" style="font-size:1.1rem"></i> SSL Seguro</span>
+                        <span class="trust-badge" style="display: inline-flex; align-items: center; gap: 6px;"><i
+                                class="ph-fill ph-flag-banner" style="font-size:1.1rem"></i> Dados no Brasil</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="footer-bottom">
+                <span>© 2026 Konnex. Todos os direitos reservados.</span>
+                <span>Feito no Brasil</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Mobile Sticky CTA -->
+    <div class="mobile-sticky" role="complementary" aria-label="Ação rápida">
+        <a href="#pricing" class="btn-primary btn-full" id="cta-mobile-sticky" data-cta="mobile-sticky">
+            Criar minha conta agora
+        </a>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js" defer></script>
+    <script src="app.js" defer></script>
+
+</body>
+
+</html>
