@@ -2872,6 +2872,16 @@ code {
   /* Mobile sticky visible */
   .mobile-sticky {
     display: block;
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, 20px);
+    transition: opacity 0.4s var(--ease-out), transform 0.4s var(--ease-out);
+  }
+
+  .mobile-sticky.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translate(-50%, 0);
   }
 }
 
@@ -2901,11 +2911,6 @@ code {
     font-size: .72rem;
   }
 
-  .hero-proof {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-  }
 
   .footer-grid {
     grid-template-columns: 1fr;

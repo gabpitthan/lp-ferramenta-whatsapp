@@ -322,7 +322,7 @@ window.addEventListener('load', function initHeroGSAP() {
     .from('.float-metric', { opacity: 0, y: 16, duration: 0.6, stagger: 0.18, ease: 'power3.out' }, 0.65);
 });
 
-// ─── MOBILE STICKY — HIDE WHEN PRICING IS VISIBLE ────────────────
+// ─── MOBILE STICKY — HIDE WHEN PRICING IS VISIBLE OR AT TOP ──────
 (function initMobileSticky() {
   const sticky = document.querySelector('.mobile-sticky');
   const pricing = document.getElementById('pricing');
@@ -330,14 +330,42 @@ window.addEventListener('load', function initHeroGSAP() {
   if (!sticky) return;
 
   const targets = [pricing, footer].filter(Boolean);
-  if (!targets.length) return;
+  const visibleTargets = new Set();
 
-  const observer = new IntersectionObserver(entries => {
-    const anyVisible = entries.some(e => e.isIntersecting);
-    sticky.style.display = anyVisible ? 'none' : '';
-  }, { threshold: 0.1 });
+  const updateSticky = () => {
+    if (window.scrollY > 400 && visibleTargets.size === 0) {
+      sticky.classList.add('is-visible');
+    } else {
+      sticky.classList.remove('is-visible');
+    }
+  };
 
-  targets.forEach(t => observer.observe(t));
+  if (targets.length) {
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          visibleTargets.add(e.target);
+        } else {
+          visibleTargets.delete(e.target);
+        }
+      });
+      updateSticky();
+    }, { threshold: 0 });
+    targets.forEach(t => observer.observe(t));
+  }
+
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        updateSticky();
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, { passive: true });
+
+  updateSticky();
 })();
 
 // ─── CTA TRACKING (stub — replace with real analytics) ────────────
