@@ -226,7 +226,7 @@ window.addEventListener('load', function initScrollTriggerReveal() {
           `Olá! Me chamo ${name} e gostaria de receber uma avaliação gratuita da Implementação Black do Konnex.`
         );
         // Aqui você define o número final de destino
-        const waUrl = `https://wa.me/5500000000000?text=${msg}`;
+        const waUrl = `https://wa.me/5588996090796?text=${msg}`;
 
         // Send webhook (fire and proceed)
         fetch('https://typebot-n8n.fvycv4.easypanel.host/webhook/6b799fed-45c5-4316-998f-f30611e33835', {
