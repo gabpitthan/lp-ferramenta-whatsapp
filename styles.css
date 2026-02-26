@@ -2826,7 +2826,9 @@ code {
   }
 
   .meta-badge-img-wrap {
-    display: none;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 24px;
   }
 
   .meta-api-visual-col .meta-compare {
