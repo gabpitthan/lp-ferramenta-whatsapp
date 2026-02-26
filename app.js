@@ -229,7 +229,7 @@ window.addEventListener('load', function initScrollTriggerReveal() {
         const waUrl = `https://wa.me/5500000000000?text=${msg}`;
 
         // Send webhook (fire and proceed)
-        fetch('https://typebot-n8n.fvycv4.easypanel.host/webhook-test/6b799fed-45c5-4316-998f-f30611e33835', {
+        fetch('https://typebot-n8n.fvycv4.easypanel.host/webhook/6b799fed-45c5-4316-998f-f30611e33835', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
