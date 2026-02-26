@@ -2832,7 +2832,7 @@ code {
   }
 
   .meta-api-visual-col .meta-compare {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
   }
 
   /* Bento */
