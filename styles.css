@@ -1008,56 +1008,115 @@ code {
   }
 }
 
-/* ─── INTEGRATIONS BAR ───────────────────────────── */
+/* ─── INTEGRATIONS — MARQUEE ─────────────────────── */
 .integrations {
-  padding: 28px 0;
-  background: var(--white);
-  border-top: 1px solid var(--gray-100);
-  border-bottom: 1px solid var(--gray-100);
+  padding: 28px 0 32px;
+  background: var(--gray-50);
+  overflow: hidden;
 }
 
 .integrations-label {
   text-align: center;
-  font-size: .72rem;
+  font-size: .65rem;
   font-weight: 600;
   color: var(--gray-400);
   text-transform: uppercase;
-  letter-spacing: 2.5px;
+  letter-spacing: 3px;
   margin-bottom: 18px;
 }
 
-.integrations-row {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
+/* Wrapper: relative so the fade overlays can be absolute inside */
+.integrations-marquee-wrap {
+  position: relative;
+  width: 100%;
 }
 
-.integration-item {
+/* Blur fade edges */
+.marquee-fade {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 140px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.marquee-fade--left {
+  left: 0;
+  background: linear-gradient(to right, var(--gray-50) 30%, transparent 100%);
+}
+
+.marquee-fade--right {
+  right: 0;
+  background: linear-gradient(to left, var(--gray-50) 30%, transparent 100%);
+}
+
+/* Clip the scrolling strip */
+.marquee-track {
+  overflow: hidden;
+  width: 100%;
+}
+
+/* Inner strip: exactly 2× content, so translateX(-50%) === 1× width */
+.marquee-inner {
   display: flex;
+  align-items: center;
+  gap: 0;
+  width: max-content;
+  will-change: transform;
+  animation: marquee-scroll 40s linear infinite;
+}
+
+/* Pause on hover */
+.integrations-marquee-wrap:hover .marquee-inner {
+  animation-play-state: paused;
+}
+
+/* The only keyframe: 0 → -50%. Since content is doubled, it snaps back seamlessly */
+@keyframes marquee-scroll {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Each chip: minimal, no border, just icon + label */
+.int-chip {
+  display: inline-flex;
   align-items: center;
   gap: 7px;
-  padding: 6px 14px;
-  border-radius: var(--radius-pill);
-  background: var(--gray-50);
-  border: 1px solid var(--gray-200);
+  padding: 0 22px;
   font-size: .8rem;
   font-weight: 500;
-  color: var(--gray-600);
-  transition: border-color .2s, color .2s;
+  color: var(--gray-500);
   white-space: nowrap;
+  cursor: default;
+  transition: color .2s;
+  position: relative;
 }
 
-.integration-item:hover {
-  border-color: var(--emerald);
-  color: var(--emerald);
+/* Dot separator between chips */
+.int-chip::after {
+  content: '·';
+  position: absolute;
+  right: 0;
+  color: var(--gray-300);
+  font-size: .9rem;
+  line-height: 1;
 }
 
-.int-logo {
+.int-chip i {
   font-size: 1rem;
   line-height: 1;
   flex-shrink: 0;
+  color: var(--gray-400);
+}
+
+.int-chip:hover {
+  color: var(--gray-700);
 }
 
 /* ─── SECTION BLUR DECORATORS ──────────────────────── */
@@ -1438,7 +1497,7 @@ code {
 
 .case-result {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 10px;
   padding: 14px;
   background: var(--gray-50);
@@ -1449,18 +1508,34 @@ code {
 
 .result-metric {
   font-family: 'Syne', sans-serif;
-  font-size: 1.5rem;
+  font-size: 1.1rem;
   font-weight: 800;
   color: var(--emerald);
   flex-shrink: 0;
   line-height: 1;
+  white-space: nowrap;
+}
+
+.case-result--stacked {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.case-result--stacked .result-metric {
+  font-size: 1.3rem;
+}
+
+.case-result--stacked .result-label {
+  font-size: .74rem;
 }
 
 .result-label {
   font-size: .76rem;
   color: var(--gray-600);
   line-height: 1.4;
-  padding-top: 2px;
+  flex: 1;
+  min-width: 0;
 }
 
 /* ─── PRICING ────────────────────────────────────── */
@@ -1474,7 +1549,7 @@ code {
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
   margin-bottom: 40px;
-  align-items: start;
+  align-items: stretch;
 }
 
 .pricing-card {
@@ -1503,11 +1578,10 @@ code {
   -webkit-backdrop-filter: blur(16px);
   border-color: rgba(255, 255, 255, .15);
   box-shadow: var(--shadow-colored);
-  transform: translateY(-8px);
 }
 
 .pricing-card--featured:hover {
-  transform: translateY(-14px);
+  transform: translateY(-6px);
 }
 
 .pricing-card--featured .pricing-header h3 {
@@ -1659,9 +1733,16 @@ code {
   color: var(--navy);
 }
 
-/* 3-column layout when Black plan is present */
+/* 3-column layout when Basic/Premium plans are present */
 .pricing-grid--3 {
   grid-template-columns: repeat(3, 1fr);
+}
+
+/* 1-column layout for single highlighted plan */
+.pricing-grid--1 {
+  grid-template-columns: 1fr;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 /* ── Black Plan Card ── */
@@ -1975,10 +2056,7 @@ code {
   color: #60a5fa;
 }
 
-.meta-label {
-  color: #60a5fa !important;
-  border-color: rgba(96, 165, 250, .2) !important;
-}
+/* Removed .meta-label to inherit the default section-label color */
 
 .meta-api-content h2 {
   font-size: clamp(1.8rem, 3.5vw, 2.8rem);

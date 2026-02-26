@@ -81,84 +81,193 @@
 })();
 
 // ─── SCROLL REVEAL — BELOW-FOLD ONLY ─────────────────────────────
-// IMPORTANT: Only elements BELOW the initial viewport get opacity:0.
-// Elements already visible on load are NEVER hidden.
-// This prevents blank sections on load and screenshot tools.
-(function initReveal() {
-  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (prefersReduced) return;
+// Usa GSAP ScrollTrigger para animar todos os elementos no scroll (subindo sem blur)
+window.addEventListener('load', function initScrollTriggerReveal() {
+  if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Lista de seletores para animar
   const revealSelectors = [
-    '.integration-item',
-    '.problem-content',
-    '.problem-visual',
+    '.section-header',
     '.bento-card',
     '.case-card',
     '.pricing-card',
     '.faq-item',
+    '.meta-api-content',
+    '.meta-api-visual-col',
+    '.problem-content',
+    '.problem-visual',
     '.cta-final-box',
-    '.section-header',
+    '.testimonial-card',
+    '.ticker-card'
   ];
 
-  const els = document.querySelectorAll(revealSelectors.join(','));
-  if (!els.length) return;
-
+  // Identifica todos os elementos na página
+  const elements = document.querySelectorAll(revealSelectors.join(','));
   const viewportH = window.innerHeight;
 
-  // Only hide elements that are genuinely below the fold on first load
-  const toReveal = [];
-  els.forEach((el, i) => {
+  elements.forEach((el) => {
+    // Apenas anima se o elemento estiver abaixo da primeira tela inicial
     const rect = el.getBoundingClientRect();
-    const isInView = rect.top < viewportH && rect.bottom > 0;
-    if (!isInView) {
-      // Below fold — safe to animate in
-      el.style.transitionDelay = ((i % 5) * 70) + 'ms';
-      el.classList.add('reveal-ready');
-      toReveal.push(el);
+    if (rect.top > viewportH * 0.8) {
+      // Estado inicial (invisível e movido para baixo - mais sutil)
+      gsap.set(el, { opacity: 0, y: 40 });
+
+      // Animação no scroll (mais suave e longa)
+      gsap.to(el, {
+        scrollTrigger: {
+          trigger: el,
+          start: "top 95%", // Inicia mais cedo e subtilmente
+          toggleActions: "play none none none"
+        },
+        opacity: 1,
+        y: 0,
+        duration: 0.85, // Mais devagar
+        ease: "power3.out", // Curva mais elegante // ou "expo.out" para um freio mais longo
+        clearProps: "all" // Remove os estilos inline no final da animação para não quebrar outros CSS
+      });
     }
-    // Elements in view on load: skip — they stay visible
   });
 
-  if (!toReveal.length) return;
+  // ─── CONTACT FORM HANDLER & PHONE MASK ─────────────────────────
+  (function initContactForm() {
+    const phoneInput = document.getElementById('whatsapp-input');
+    const errorMsg = document.getElementById('whatsapp-error');
+    const form = document.getElementById('pricing-form');
+    const btnSubmit = document.getElementById('btn-submit-pricing');
 
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('reveal-in');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, {
-    threshold: 0.01,
-    rootMargin: '0px 0px 60px 0px',
-  });
+    if (phoneInput) {
+      // Real-time masking: (XX) XXXXX-XXXX or (XX) XXXX-XXXX
+      phoneInput.addEventListener('input', function (e) {
+        // Remove all non-digits
+        let val = e.target.value.replace(/\D/g, '');
 
-  toReveal.forEach(el => observer.observe(el));
+        // Limit to 11 digits (DDD + 9 digits)
+        val = val.substring(0, 11);
 
-  // Safety fallback: if observer never fires (e.g. headless browser), reveal everything after 2s
-  setTimeout(() => {
-    toReveal.forEach(el => {
-      if (!el.classList.contains('reveal-in')) {
-        el.classList.add('reveal-in');
-      }
-    });
-  }, 2000);
-})();
+        // Apply mask
+        let formatted = '';
+        if (val.length > 0) {
+          formatted = '(' + val.substring(0, 2);
+          if (val.length > 2) {
+            formatted += ') ' + val.substring(2, 7);
+            if (val.length > 7) {
+              formatted += '-' + val.substring(7, 11);
+            }
+          }
+        }
 
+        e.target.value = formatted;
 
-// ─── CONTACT FORM HANDLER ─────────────────────────
-function handleFormSubmit(e) {
-  e.preventDefault();
-  const name = document.getElementById('contact-name')?.value.trim() || '';
-  const phone = document.getElementById('contact-whatsapp')?.value.trim() || '';
-  const msg = encodeURIComponent(
-    `Olá! Me chamo ${name} e gostaria de receber uma avaliação gratuita do Konnex. Meu WhatsApp: ${phone}`
-  );
-  window.open(`https://wa.me/5500000000000?text=${msg}`, '_blank', 'noopener');
-}
+        // Clear error on input
+        if (errorMsg) errorMsg.style.display = 'none';
+        phoneInput.style.borderColor = 'rgba(255,255,255,0.2)';
+      });
 
-// ─── TESTIMONIAL CAROUSEL ─────────────────────────
-(function initCarousel() {
+      phoneInput.addEventListener('focus', function () {
+        phoneInput.style.borderColor = 'var(--emerald)';
+      });
+
+      phoneInput.addEventListener('blur', function (e) {
+        const valRaw = e.target.value.replace(/\D/g, '');
+        if (valRaw.length === 0) {
+          phoneInput.style.borderColor = 'rgba(255,255,255,0.2)';
+          if (errorMsg) errorMsg.style.display = 'none';
+        } else if (valRaw.length < 11) {
+          phoneInput.style.borderColor = '#f87171';
+          if (errorMsg) {
+            errorMsg.style.display = 'block';
+            errorMsg.innerText = 'Número incompleto (Ex: 11 99999-9999)';
+          }
+        } else {
+          phoneInput.style.borderColor = 'rgba(255,255,255,0.2)';
+        }
+      });
+    }
+
+    if (form) {
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const name = form.querySelector('[name="name"]')?.value.trim() || '';
+        const phoneInput = document.getElementById('whatsapp-input');
+        const phoneRaw = phoneInput ? phoneInput.value.replace(/\D/g, '') : '';
+
+        // Validation: phone must have precisely 11 digits (DDD + 9 digits)
+        if (phoneRaw.length < 11) {
+          if (errorMsg) {
+            errorMsg.style.display = 'block';
+            errorMsg.innerText = phoneRaw.length === 0 ? 'Campo obrigatório' : 'Número incompleto (Ex: 11 99999-9999)';
+          }
+          if (phoneInput) {
+            phoneInput.style.borderColor = '#f87171'; // Red border
+            phoneInput.focus();
+          }
+          return; // Stop submission
+        }
+
+        // Valid: Proceed to Webhook and WhatsApp
+        const formData = {
+          name: name,
+          phoneRaw: phoneRaw,
+          phoneFormatted: phoneInput.value
+        };
+
+        const originalBtnText = btnSubmit ? btnSubmit.innerHTML : 'Solicitar Agora';
+        if (btnSubmit) {
+          btnSubmit.innerHTML = 'Aguarde...';
+          btnSubmit.style.opacity = '0.7';
+          btnSubmit.style.pointerEvents = 'none';
+        }
+
+        const msg = encodeURIComponent(
+          `Olá! Me chamo ${name} e gostaria de receber uma avaliação gratuita da Implementação Black do Konnex.`
+        );
+        // Aqui você define o número final de destino
+        const waUrl = `https://wa.me/5500000000000?text=${msg}`;
+
+        // Send webhook (fire and proceed)
+        fetch('https://typebot-n8n.fvycv4.easypanel.host/webhook-test/6b799fed-45c5-4316-998f-f30611e33835', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(formData)
+        })
+          .then(res => {
+            if (!res.ok) throw new Error('Falha no servidor');
+            if (btnSubmit) {
+              btnSubmit.innerHTML = '<i class="ph-fill ph-check-circle"></i> Solicitado com sucesso!';
+              btnSubmit.style.backgroundColor = '#10b981'; // Emerald Green
+              btnSubmit.style.opacity = '1';
+              btnSubmit.style.pointerEvents = 'none'; // Keep disabled after success
+            }
+          })
+          .catch(err => {
+            console.error('Erro no webhook:', err);
+            if (btnSubmit) {
+              btnSubmit.innerHTML = '<i class="ph-fill ph-warning-circle"></i> Erro ao enviar. Tente novamente.';
+              btnSubmit.style.backgroundColor = '#f87171'; // Red
+              btnSubmit.style.opacity = '1';
+              btnSubmit.style.pointerEvents = 'auto'; // Re-enable to retry
+
+              // Revert visual after 3 seconds
+              setTimeout(() => {
+                btnSubmit.innerHTML = originalBtnText;
+                btnSubmit.style.backgroundColor = 'var(--emerald)';
+              }, 3000);
+            }
+          })
+          .finally(() => {
+            // REDIRECIONAMENTO WHATSAPP DESATIVADO TEMPORARIAMENTE
+            // Para reativar, basta remover as duas barras "//" da linha abaixo
+            // window.open(waUrl, '_blank', 'noopener');
+          });
+      });
+    }
+  })();
   const track = document.getElementById('testimonialTrack');
   if (!track) return;
 
