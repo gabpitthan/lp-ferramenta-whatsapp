@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- SEO -->
+    <title>Documentação | Konnex</title>
+    <meta name="description" content="Documentação oficial da plataforma Konnex.">
+    <link rel="canonical" href="https://konnex.app/docs/">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" as="style"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Syne:wght@700;800&family=JetBrains+Mono:wght@400;500;700&display=swap">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Syne:wght@700;800&family=JetBrains+Mono:wght@400;500;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="../docs.css">
+</head>
+
+<body class="docs-body">
+
+    <!-- ===== TOP NAVBAR (Mobile only) ===== -->
+    <header class="docs-mobile-header" role="banner">
+        <a href="../index.html" class="logo" aria-label="Konnex: voltar para a home">
+            <span class="logo-text">Kon<span>nex</span></span>
+        </a>
+        <button class="mobile-toggle" id="docsMobileToggle" aria-label="Abrir menu da documentação"
+            aria-expanded="false" aria-controls="docsSidebar">
+            <span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
+        </button>
+    </header>
+
+    <div class="docs-layout">
+        <!-- ===== SIDEBAR ===== -->
+        <aside class="docs-sidebar" id="docsSidebar" role="navigation" aria-label="Navegação da documentação">
+            <div class="sidebar-header desktop-only">
+                <a href="../index.html" class="logo" aria-label="Konnex: voltar para a home">
+                    <span class="logo-text">Kon<span>nex</span></span>
+                </a>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="sidebar-search">
+                <div class="search-input-wrapper">
+                    <i class="ph-bold ph-magnifying-glass"></i>
+                    <input type="text" placeholder="Pesquisar na documentação..." aria-label="Pesquisar">
+                    <kbd class="desktop-only">/</kbd>
+                </div>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="sidebar-nav">
+                <div class="nav-group">
+                    <h5 class="nav-group-title">Introdução</h5>
+                    <ul class="nav-list">
+                        <li><a href="#welcome" class="nav-link active">Bem-vindo</a></li>
+                        <li><a href="#quickstart" class="nav-link">Começando Rápido</a></li>
+                        <li><a href="#architecture" class="nav-link">Arquitetura da Plataforma</a></li>
+                    </ul>
+                </div>
+
+                <div class="nav-group">
+                    <h5 class="nav-group-title">Integrações API</h5>
+                    <ul class="nav-list">
+                        <li><a href="#auth" class="nav-link">Autenticação (Bearer)</a></li>
+                        <li><a href="#endpoints" class="nav-link">Endpoints Essenciais</a></li>
+                        <li><a href="#webhooks" class="nav-link">Configurando Webhooks</a></li>
+                    </ul>
+                </div>
+
+                <div class="nav-group">
+                    <h5 class="nav-group-title">Atendimento</h5>
+                    <ul class="nav-list">
+                        <li><a href="#crm" class="nav-link">Configurando o Kanban</a></li>
+                        <li><a href="#chatbot" class="nav-link">Criando Fluxos de IA</a></li>
+                        <li><a href="#macro" class="nav-link">Filtros e Macros</a></li>
+                    </ul>
+                </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a href="https://app.usekonnex.com" class="btn-primary btn-full"
+                    style="padding: 10px; font-size: 0.85rem;" target="_blank" rel="noopener">Acessar Painel</a>
+            </div>
+        </aside>
+
+        <!-- ===== MAIN CONTENT ===== -->
+        <main class="docs-main" id="main-content">
+            <div class="docs-container">
+
+                <!-- Breadcrumb -->
+                <nav class="breadcrumb" aria-label="Breadcrumb">
+                    <ol>
+                        <li>Introdução</li>
+                        <i class="ph-bold ph-caret-right"></i>
+                        <li aria-current="page">Bem-vindo</li>
+                    </ol>
+                </nav>
+
+                <article class="docs-article">
+                    <header class="article-header">
+                        <h1>Bem-vindo à Documentação Konnex</h1>
+                        <p class="article-subtitle">Tudo o que você precisa saber para integrar, escalar e dominar o
+                            atendimento automatizado da sua empresa usando nossa API e ferramentas.</p>
+                    </header>
+
+                    <h2 id="quickstart">Visão Geral</h2>
+                    <p>A Konnex é muito mais do que um centralizador de mensagens. Foi desenhada do chão como uma
+                        plataforma <em>API-first</em>, significando que quase tudo o que seu time faz pela interface de
+                        usuário (UI) também pode ser feito programaticamente.</p>
+
+                    <p>Se você é desenvolvedor querendo conectar seu ERP ou uma agência de automação configurando o n8n
+                        para dezenas de clientes, você está no lugar certo.</p>
+
+                    <!-- Alert / Callout -->
+                    <div class="callout callout-info">
+                        <div class="callout-icon"><i class="ph-fill ph-info"></i></div>
+                        <div class="callout-content">
+                            <strong>Nota sobre o modo White-Label:</strong>
+                            <p>Se você assina o plano Agência/White-Label, os limites de disparo de API listados aqui
+                                são aplicados por <em>Workspace</em>, não por instância geral. Cada cliente seu ganha
+                                seu próprio pacote de requisições seguro.</p>
+                        </div>
+                    </div>
+
+                    <h2 id="architecture">Modelagem e Design</h2>
+                    <p>O Design System segue a estética que nos consolidou no mercado Enterprise, focando em alta taxa
+                        de conversão e mínima fricção:</p>
+                    <ul>
+                        <li><strong style="color:var(--emerald);">Desempenho:</strong> Respostas sub-200ms na nossa
+                            GraphQL/REST API.</li>
+                        <li><strong style="color:var(--emerald);">Escala:</strong> Infraestrutura capaz de segurar picos
+                            da Black Friday.</li>
+                        <li><strong style="color:var(--emerald);">Segurança:</strong> Criptografia in-transit (TLS 1.3)
+                            e at-rest.</li>
+                    </ul>
+
+                    <h2 id="auth">Exemplos de Código</h2>
+                    <p>Abaixo um exemplo simples de como autenticar e enviar uma mensagem simples de texto para um
+                        cliente no WhatsApp via nossa API REST.</p>
+
+                    <!-- Code Block with Copy Button -->
+                    <div class="code-block-wrapper">
+                        <div class="code-block-header">
+                            <span class="code-language">javascript</span>
+                            <button class="copy-btn" aria-label="Copiar código" title="Copiar">
+                                <i class="ph-bold ph-copy"></i> Copiar
+                            </button>
+                        </div>
+                        <pre><code>const axios = require('axios');
+
+async function sendWhatsAppMessage() {
+  try {
+    const response = await axios.post('https://api.usekonnex.com/v1/messages/send', {
+      number: '5511999999999',
+      body: 'Olá! Seu pedido #1234 já está a caminho. 🚀',
+      context: 'order-update'
+    }, {
+      headers: {
+        'Authorization': `Bearer SEU_TOKEN_AQUI`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    console.log('Mensagem enviada com sucesso:', response.data.messageId);
+  } catch (error) {
+    console.error('Falha ao enviar:', error.response.data);
+  }
+}
+
+sendWhatsAppMessage();</code></pre>
+                    </div>
+
+                    <h2 id="images">Imagens e Diagramas</h2>
+                    <p>Você pode documentar a interface da própria aplicação usando prints profissionais.</p>
+
+                    <figure class="docs-figure">
+                        <div class="docs-image-placeholder"
+                            style="aspect-ratio: 16/9; background: var(--navy); border-radius: var(--radius-md); border: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative;">
+                            <!-- Reusing the dashboard mockup from the main page -->
+                            <img src="../mockup-dashboard.png" alt="Interface Completa do Konnex"
+                                style="width: 100%; height: 100%; object-fit: cover; opacity: 0.8;">
+
+                            <!-- Overlay to make it look like a placeholder UI -->
+                            <div
+                                style="position: absolute; inset: 0; background: linear-gradient(to top, var(--navy) 0%, transparent 100%);">
+                            </div>
+                        </div>
+                        <figcaption>Painel Kanban centralizado com caixa telefônica e CRM.</figcaption>
+                    </figure>
+
+                    <!-- Danger Callout -->
+                    <div class="callout callout-danger" style="margin-top: 48px;">
+                        <div class="callout-icon"><i class="ph-fill ph-warning-octagon"></i></div>
+                        <div class="callout-content">
+                            <strong>Aviso de Depreciação</strong>
+                            <p>A API v1 endpoints `/v1/chat/` será desativada em Q4 de 2026. Recomendamos atualizar seus
+                                webhooks para a API v2 imediatamente usando o webhook builder.</p>
+                        </div>
+                    </div>
+
+                </article>
+
+                <!-- Documentation Pagination -->
+                <div class="docs-pagination">
+                    <a href="#" class="docs-page-nav prev disabled" aria-disabled="true">
+                        <i class="ph-bold ph-arrow-left"></i>
+                        <div class="nav-content">
+                            <span class="nav-label">Anterior</span>
+                            <span class="nav-title">Nenhum</span>
+                        </div>
+                    </a>
+                    <a href="#quickstart" class="docs-page-nav next">
+                        <div class="nav-content">
+                            <span class="nav-label">Próximo</span>
+                            <span class="nav-title">Começando Rápido</span>
+                        </div>
+                        <i class="ph-bold ph-arrow-right"></i>
+                    </a>
+                </div>
+
+                <!-- Simple Footer for Docs -->
+                <footer class="docs-footer">
+                    <p>© 2026 Konnex. <a href="../privacidade/">Privacidade</a> · <a href="../termos-uso/">Termos</a>
+                    </p>
+                    <p>Faltou algo? <a href="#">Sugerir edição nesta página</a></p>
+                </footer>
+            </div>
+
+            <!-- Table of Contents (On This Page) - visible only on large screens -->
+            <aside class="docs-toc desktop-only">
+                <div class="toc-sticky">
+                    <h5>Nesta página</h5>
+                    <ul class="toc-list">
+                        <li><a href="#quickstart" class="active">Visão Geral</a></li>
+                        <li><a href="#architecture">Modelagem e Design</a></li>
+                        <li><a href="#auth">Exemplos de Código</a></li>
+                        <li><a href="#images">Imagens e Diagramas</a></li>
+                    </ul>
+                </div>
+            </aside>
+
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // Copy to clipboard functionality
+        document.querySelectorAll('.copy-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const wrapper = e.target.closest('.code-block-wrapper');
+                const code = wrapper.querySelector('code').innerText;
+
+                navigator.clipboard.writeText(code).then(() => {
+                    const originalHTML = btn.innerHTML;
+                    btn.innerHTML = '<i class="ph-bold ph-check"></i> Copiado';
+                    btn.classList.add('copied');
+
+                    setTimeout(() => {
+                        btn.innerHTML = originalHTML;
+                        btn.classList.remove('copied');
+                    }, 2000);
+                });
+            });
+        });
+
+        // Mobile sidebar toggle
+        const mobileToggle = document.getElementById('docsMobileToggle');
+        const sidebar = document.getElementById('docsSidebar');
+
+        if (mobileToggle && sidebar) {
+            mobileToggle.addEventListener('click', () => {
+                const isExpanded = mobileToggle.getAttribute('aria-expanded') === 'true';
+                mobileToggle.setAttribute('aria-expanded', !isExpanded);
+                sidebar.classList.toggle('open');
+
+                if (window.innerWidth < 1024) {
+                    document.body.style.overflow = !isExpanded ? 'hidden' : '';
+                }
+            });
+
+            // Close sidebar when clicking a link on mobile
+            sidebar.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    if (window.innerWidth < 1024) {
+                        mobileToggle.setAttribute('aria-expanded', 'false');
+                        sidebar.classList.remove('open');
+                        document.body.style.overflow = '';
+                    }
+                });
+            });
+        }
+    </script>
+</body>
+
+</html>
