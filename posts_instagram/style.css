@@ -66,20 +66,75 @@
 }
 
 body {
-    background-color: var(--clr-gray-50);
+    background-color: var(--clr-navy);
     font-family: var(--font-body);
     color: var(--clr-gray-800);
     display: flex;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column;
     height: 100vh;
     overflow: hidden;
+}
+
+/* ── KONNEX TOPBAR ──────────────────────────────────── */
+.kx-topbar {
+    height: 44px;
+    min-height: 44px;
+    background: rgba(11,22,40,.95);
+    border-bottom: 1px solid rgba(255,255,255,.08);
+    display: flex;
+    align-items: center;
+    padding: 0 1.25rem;
+    gap: 1rem;
+    z-index: 100;
+    flex-shrink: 0;
+}
+
+.kx-topbar-logo {
+    font-family: var(--font-heading);
+    font-size: .9rem;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -.02em;
+    text-decoration: none;
+}
+.kx-topbar-logo span { color: var(--clr-emerald-light); }
+
+.kx-topbar-sep {
+    width: 1px; height: 16px;
+    background: rgba(255,255,255,.12);
+}
+
+.kx-topbar-title {
+    font-size: .8rem;
+    font-weight: 600;
+    color: rgba(255,255,255,.65);
+}
+
+.kx-topbar-back {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: .35rem;
+    font-size: .75rem;
+    font-weight: 500;
+    color: var(--clr-emerald-light);
+    opacity: .8;
+    text-decoration: none;
+    transition: opacity .15s;
+}
+.kx-topbar-back:hover { opacity: 1; }
+
+/* app-container occupies remaining height */
+.app-container {
+    flex: 1;
+    min-height: 0;
 }
 
 .app-container {
     display: flex;
     width: 100vw;
-    height: 100vh;
+    flex: 1;
+    min-height: 0;
 }
 
 /* === CAPTION PANEL (right column) === */

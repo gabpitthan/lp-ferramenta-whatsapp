@@ -15,6 +15,29 @@
   <link rel="stylesheet" href="../styles.css">
 
   <style>
+    /* ── KONNEX TOPBAR ── */
+    .kx-topbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      height: 44px;
+      background: rgba(11,22,40,.92);
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      display: flex; align-items: center;
+      padding: 0 1.5rem; gap: .75rem;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .kx-logo { font-family:'Syne',sans-serif; font-weight:800; font-size:.95rem; color:#fff; letter-spacing:-.02em; text-decoration:none; }
+    .kx-logo span { color: #12C87A; }
+    .kx-sep  { width:1px; height:16px; background: rgba(255,255,255,.12); }
+    .kx-page { font-size:.78rem; font-weight:600; color:rgba(255,255,255,.5); }
+    .kx-back {
+      margin-left:auto; display:flex; align-items:center; gap:.35rem;
+      font-size:.75rem; font-weight:500; color:#12C87A;
+      border:1px solid rgba(18,200,122,.2); border-radius:100px;
+      padding:.22rem .8rem; text-decoration:none; opacity:.8; transition:opacity .15s, background .15s;
+    }
+    .kx-back:hover { opacity:1; background:rgba(10,135,84,.18); }
+
     /* Reset & Snap Scrolling */
     html,
     body {
@@ -401,6 +424,15 @@
 </head>
 
 <body>
+
+  <!-- KONNEX TOPBAR -->
+  <header class="kx-topbar">
+    <a href="../" class="kx-logo">Kon<span>nex</span></a>
+    <div class="kx-sep"></div>
+    <span class="kx-page">Apresentacao Comercial</span>
+    <a href="../painel/" class="kx-back">&#8592; Voltar ao Painel</a>
+  </header>
+
   <!-- Canvas de Desenho -->
   <canvas id="drawCanvas"></canvas>
 
