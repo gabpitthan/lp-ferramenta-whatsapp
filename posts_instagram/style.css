@@ -877,3 +877,85 @@ body {
     max-width: 90%;
     margin: 0 auto;
 }
+
+/* ═══════════════════════════════════════════════════════
+   RESPONSIVIDADE MOBILE — max-width: 768px
+   ═══════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+
+    /* Topbar */
+    .kx-topbar { padding: 0 1rem; gap: .5rem; }
+    .kx-topbar-sep,
+    .kx-topbar-title { display: none; }
+    .kx-topbar-back { font-size: .72rem; padding: .22rem .65rem; }
+
+    /* Layout principal: empilhar verticalmente */
+    body {
+        height: auto;
+        min-height: 100dvh;
+        overflow: auto;
+    }
+
+    .app-container {
+        flex-direction: column;
+        width: 100%;
+        height: auto;
+        overflow-y: auto;
+    }
+
+    /* Painel de controles: largura total, horizontal */
+    .controls {
+        width: 100%;
+        min-width: unset;
+        border-right: none;
+        border-bottom: 1px solid var(--clr-gray-200);
+        padding: 1rem;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: .75rem;
+        overflow-y: visible;
+        max-height: none;
+    }
+
+    .controls h2 { width: 100%; font-size: 1rem; margin-bottom: .25rem; }
+
+    .selector-group {
+        flex: 1 1 140px;
+        min-width: 0;
+    }
+
+    .nav-buttons { width: 100%; }
+
+    .post-info { width: 100%; }
+
+    .instructions { display: none; }
+
+    .back-link { font-size: .8rem; }
+
+    /* Área do post: centralizada com scroll horizontal */
+    .post-wrapper {
+        padding: .75rem;
+        min-height: 60vw;
+        overflow: auto;
+    }
+
+    /* Caption panel: largura total abaixo do post */
+    .caption-panel {
+        width: 100%;
+        min-width: unset;
+        border-left: none;
+        border-top: 1px solid var(--clr-gray-200);
+        max-height: 220px;
+        padding: 1rem;
+    }
+
+    .caption-textarea {
+        min-height: 120px;
+    }
+}
+
+@media (max-width: 480px) {
+    .controls { padding: .75rem; gap: .5rem; }
+    .selector-group { flex: 1 1 100%; }
+    .kx-topbar { height: 40px; }
+}

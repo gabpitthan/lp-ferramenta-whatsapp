@@ -463,6 +463,23 @@
       .tools-grid { grid-template-columns:1fr; }
       .projects-grid { grid-template-columns:1fr; }
       .search-wrap input { width:140px; }
+      .topbar-btn span { display:none; }
+      .page-header h2 { font-size:1.3rem; }
+      .stat-num { font-size:1.5rem; }
+    }
+
+    @media(max-width:420px) {
+      .stats-grid { grid-template-columns:repeat(2,1fr); gap:.6rem; }
+      .stat { padding:1rem; }
+      .search-wrap { display:none; }
+      .toolbar { gap:.4rem; }
+      .filter-btn { padding:.28rem .65rem; font-size:.72rem; }
+      .topbar { height:52px; }
+      .content { padding:1rem; }
+      .tool-card { padding:1.25rem; }
+      .proj-card { padding:1rem 1.25rem; }
+      .card-links { flex-wrap:wrap; }
+      .topbar-right .topbar-btn.ghost { display:none; }
     }
   </style>
 </head>
