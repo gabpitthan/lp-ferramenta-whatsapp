@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Painel de Projetos | Konnex</title>
+  <meta name="robots" content="noindex, nofollow">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+
+  <!-- Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+  <style>
+    /* ─── TOKENS (Konnex Design System) ───────────────── */
+    :root {
+      --emerald:       #0A8754;
+      --emerald-dark:  #065C3A;
+      --emerald-light: #12C87A;
+      --emerald-glow:  rgba(10, 135, 84, 0.20);
+      --navy:          #0B1628;
+      --navy-mid:      #122040;
+      --blue-light:    #1E3A5F;
+      --orange:        #FF6B35;
+      --white:         #FFFFFF;
+      --gray-50:       #F7F9FC;
+      --gray-100:      #EDF1F7;
+      --gray-200:      #D8E0EC;
+      --gray-300:      #B8C8D8;
+      --gray-400:      #8A9BB8;
+      --gray-600:      #4A5E78;
+      --gray-700:      #2E3F55;
+      --gray-800:      #1A2638;
+      --glass-border:  rgba(255,255,255,.10);
+      --shadow-lg:     0 16px 48px rgba(0,0,0,.32);
+      --shadow-colored:0 16px 48px rgba(10,135,84,.22), 0 4px 16px rgba(10,135,84,.12);
+      --radius-sm:     8px;
+      --radius-md:     12px;
+      --radius-lg:     20px;
+      --radius-xl:     28px;
+      --radius-pill:   100px;
+      --ease-out:      cubic-bezier(.16,1,.3,1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; font-size: 16px; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--navy);
+      color: var(--gray-100);
+      line-height: 1.65;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: 'Syne', 'Inter', sans-serif;
+      font-weight: 800;
+      line-height: 1.12;
+      letter-spacing: -.025em;
+    }
+
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+    button { cursor: pointer; font-family: inherit; }
+
+    /* ─── BACKGROUND ORBS ──────────────────────────────── */
+    .bg-orbs {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: .25;
+    }
+    .orb-1 { width: 600px; height: 600px; background: var(--emerald);     top: -200px; left: -150px; }
+    .orb-2 { width: 500px; height: 500px; background: var(--navy-mid);    bottom: -100px; right: -100px; }
+    .orb-3 { width: 300px; height: 300px; background: var(--blue-light);  top: 50%; left: 50%; transform: translate(-50%,-50%); opacity: .12; }
+
+    /* ─── HEADER ───────────────────────────────────────── */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid var(--glass-border);
+      background: rgba(11,22,40,.85);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+    }
+
+    .header-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .logo-text {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.35rem;
+      color: var(--white);
+      letter-spacing: -.03em;
+    }
+    .logo-text span { color: var(--emerald-light); }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .header-back {
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+      font-size: .875rem;
+      color: var(--gray-400);
+      transition: color .2s;
+    }
+    .header-back:hover { color: var(--emerald-light); }
+
+    .header-badge {
+      font-size: .75rem;
+      font-weight: 600;
+      background: var(--emerald-glow);
+      border: 1px solid rgba(18,200,122,.25);
+      color: var(--emerald-light);
+      padding: .25rem .75rem;
+      border-radius: var(--radius-pill);
+      letter-spacing: .03em;
+    }
+
+    /* ─── MAIN ─────────────────────────────────────────── */
+    .main {
+      position: relative;
+      z-index: 1;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 3rem 2rem 4rem;
+    }
+
+    /* ─── PAGE HERO ─────────────────────────────────────── */
+    .page-hero {
+      margin-bottom: 3rem;
+    }
+
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--emerald-light);
+      margin-bottom: 1rem;
+    }
+
+    .page-hero h1 {
+      font-size: clamp(1.75rem, 4vw, 2.5rem);
+      color: var(--white);
+      margin-bottom: .75rem;
+    }
+
+    .text-gradient {
+      background: linear-gradient(135deg, var(--emerald-light), #6ee7b7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .page-hero p {
+      font-size: 1rem;
+      color: var(--gray-400);
+      max-width: 520px;
+      line-height: 1.7;
+    }
+
+    /* ─── STATS ROW ─────────────────────────────────────── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .stat-card {
+      background: rgba(255,255,255,.04);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem 1.5rem;
+      transition: border-color .2s, background .2s;
+    }
+    .stat-card:hover {
+      border-color: rgba(18,200,122,.3);
+      background: rgba(18,200,122,.05);
+    }
+
+    .stat-label {
+      font-size: .72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--gray-400);
+      margin-bottom: .4rem;
+    }
+
+    .stat-value {
+      font-family: 'Syne', sans-serif;
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--white);
+    }
+    .stat-value.green  { color: var(--emerald-light); }
+    .stat-value.orange { color: var(--orange); }
+    .stat-value.blue   { color: #60a5fa; }
+
+    /* ─── TOOLBAR ───────────────────────────────────────── */
+    .toolbar {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: .5rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .filter-group {
+      display: flex;
+      gap: .4rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      display: flex;
+      align-items: center;
+      gap: .35rem;
+      background: rgba(255,255,255,.04);
+      border: 1px solid var(--glass-border);
+      color: var(--gray-400);
+      border-radius: var(--radius-pill);
+      padding: .35rem 1rem;
+      font-size: .8rem;
+      font-weight: 500;
+      transition: all .15s;
+    }
+    .filter-btn:hover  { border-color: var(--emerald); color: var(--white); }
+    .filter-btn.active {
+      background: var(--emerald-glow);
+      border-color: rgba(18,200,122,.4);
+      color: var(--emerald-light);
+    }
+
+    .search-wrap { margin-left: auto; position: relative; }
+    .search-wrap i {
+      position: absolute;
+      left: .875rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gray-400);
+      font-size: 1rem;
+      pointer-events: none;
+    }
+    .search-wrap input {
+      background: rgba(255,255,255,.05);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md);
+      padding: .45rem 1rem .45rem 2.5rem;
+      color: var(--white);
+      font-size: .875rem;
+      font-family: inherit;
+      width: 240px;
+      outline: none;
+      transition: border-color .15s;
+    }
+    .search-wrap input:focus  { border-color: var(--emerald); }
+    .search-wrap input::placeholder { color: var(--gray-600); }
+
+    /* ─── GRID ──────────────────────────────────────────── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 1.25rem;
+    }
+
+    /* ─── CARD ──────────────────────────────────────────── */
+    .card {
+      background: rgba(255,255,255,.03);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-xl);
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: .875rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color .2s, transform .25s var(--ease-out), box-shadow .25s;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--emerald), var(--emerald-light), transparent);
+      opacity: 0;
+      transition: opacity .25s;
+    }
+
+    .card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at top left, rgba(18,200,122,.06), transparent 65%);
+      opacity: 0;
+      transition: opacity .25s;
+      pointer-events: none;
+    }
+
+    .card:hover {
+      border-color: rgba(18,200,122,.35);
+      transform: translateY(-3px);
+      box-shadow: 0 20px 50px rgba(0,0,0,.3), 0 0 0 1px rgba(18,200,122,.1);
+    }
+    .card:hover::before { opacity: 1; }
+    .card:hover::after  { opacity: 1; }
+
+    .card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: .75rem;
+    }
+
+    .card-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-sm);
+      background: var(--emerald-glow);
+      border: 1px solid rgba(18,200,122,.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--emerald-light);
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    .card-icon.orange { background: rgba(255,107,53,.12); border-color: rgba(255,107,53,.2); color: var(--orange); }
+    .card-icon.blue   { background: rgba(59,130,246,.12); border-color: rgba(59,130,246,.2); color: #60a5fa; }
+    .card-icon.purple { background: rgba(139,92,246,.12); border-color: rgba(139,92,246,.2); color: #a78bfa; }
+
+    /* STATUS BADGE */
+    .badge {
+      font-size: .68rem;
+      font-weight: 700;
+      padding: .22rem .65rem;
+      border-radius: var(--radius-pill);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      white-space: nowrap;
+      border: 1px solid transparent;
+    }
+    .badge-concluido    { background: rgba(18,200,122,.12); border-color: rgba(18,200,122,.25); color: var(--emerald-light); }
+    .badge-em-andamento { background: rgba(255,107,53,.12); border-color: rgba(255,107,53,.25); color: var(--orange); }
+    .badge-ideia        { background: rgba(96,165,250,.12); border-color: rgba(96,165,250,.25); color: #60a5fa; }
+    .badge-pausado      { background: rgba(148,163,184,.10); border-color: rgba(148,163,184,.2); color: var(--gray-400); }
+
+    .card-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--white);
+      letter-spacing: -.02em;
+    }
+
+    .card-desc {
+      font-size: .875rem;
+      color: var(--gray-400);
+      line-height: 1.65;
+      flex: 1;
+    }
+
+    .card-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: .5rem;
+      padding-top: .5rem;
+      border-top: 1px solid var(--glass-border);
+    }
+
+    .category-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: .3rem;
+      font-size: .72rem;
+      font-weight: 500;
+      background: rgba(255,255,255,.05);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-pill);
+      padding: .2rem .65rem;
+      color: var(--gray-300);
+    }
+
+    .card-links {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+
+    .card-link {
+      display: flex;
+      align-items: center;
+      gap: .25rem;
+      font-size: .78rem;
+      font-weight: 500;
+      color: var(--emerald-light);
+      opacity: .7;
+      transition: opacity .15s, color .15s;
+      border: 1px solid transparent;
+      padding: .2rem .55rem;
+      border-radius: var(--radius-sm);
+    }
+    .card-link:hover {
+      opacity: 1;
+      border-color: rgba(18,200,122,.3);
+      background: rgba(18,200,122,.06);
+    }
+
+    .card-date {
+      font-size: .72rem;
+      color: var(--gray-600);
+    }
+
+    /* ─── EMPTY STATE ───────────────────────────────────── */
+    .empty {
+      grid-column: 1/-1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 5rem 2rem;
+      color: var(--gray-600);
+      gap: .75rem;
+      text-align: center;
+    }
+    .empty i { font-size: 2.5rem; color: var(--gray-700); }
+    .empty p  { font-size: .9rem; }
+
+    /* ─── FOOTER ────────────────────────────────────────── */
+    .page-footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 2rem;
+      color: var(--gray-700);
+      font-size: .78rem;
+      border-top: 1px solid var(--glass-border);
+    }
+    .page-footer a { color: var(--emerald-light); opacity: .7; }
+    .page-footer a:hover { opacity: 1; }
+
+    /* ─── RESPONSIVE ────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .main { padding: 2rem 1rem 3rem; }
+      .grid { grid-template-columns: 1fr; }
+      .search-wrap input { width: 180px; }
+      .header-inner { padding: 0 1rem; }
+    }
+
+    @media (max-width: 480px) {
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+      .search-wrap { display: none; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- BG ORBS -->
+  <div class="bg-orbs" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-inner">
+      <a href="../index.html" class="logo-text" aria-label="Konnex: voltar para a home">
+        Kon<span>nex</span>
+      </a>
+      <div class="header-right">
+        <a href="../index.html" class="header-back">
+          <i class="ph-bold ph-arrow-left"></i>
+          Voltar ao site
+        </a>
+        <span class="header-badge">Claude Code</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- PAGE HERO -->
+    <div class="page-hero">
+      <div class="section-label">
+        <i class="ph-fill ph-layout"></i>
+        Painel Pessoal
+      </div>
+      <h1>Projetos <span class="text-gradient">desenvolvidos</span><br>com Claude Code</h1>
+      <p>Acompanhe o progresso de cada ideia que ganha vida aqui. Cada projeto é registrado automaticamente e deployado via Netlify.</p>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-row" id="statsRow">
+      <div class="stat-card">
+        <div class="stat-label">Total de Projetos</div>
+        <div class="stat-value" id="statTotal">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Concluidos</div>
+        <div class="stat-value green" id="statDone">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Em Andamento</div>
+        <div class="stat-value orange" id="statWip">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Ideias</div>
+        <div class="stat-value blue" id="statIdea">0</div>
+      </div>
+    </div>
+
+    <!-- TOOLBAR -->
+    <div class="toolbar">
+      <div class="filter-group">
+        <button class="filter-btn active" data-filter="all">
+          <i class="ph-bold ph-squares-four"></i> Todos
+        </button>
+        <button class="filter-btn" data-filter="concluido">
+          <i class="ph-bold ph-check-circle"></i> Concluidos
+        </button>
+        <button class="filter-btn" data-filter="em-andamento">
+          <i class="ph-bold ph-spinner-gap"></i> Em Andamento
+        </button>
+        <button class="filter-btn" data-filter="ideia">
+          <i class="ph-bold ph-lightbulb"></i> Ideias
+        </button>
+        <button class="filter-btn" data-filter="pausado">
+          <i class="ph-bold ph-pause-circle"></i> Pausados
+        </button>
+      </div>
+      <div class="search-wrap">
+        <i class="ph-bold ph-magnifying-glass"></i>
+        <input type="text" id="searchInput" placeholder="Buscar projeto..." />
+      </div>
+    </div>
+
+    <!-- GRID -->
+    <div class="grid" id="projectGrid"></div>
+
+  </main>
+
+  <footer class="page-footer">
+    Gerenciado por <a href="https://konnex.app">Konnex</a> &middot; Deploy automático via Netlify &middot; Desenvolvido com Claude Code
+  </footer>
+
+  <script>
+    const CATEGORY_ICONS = {
+      'landing-page': 'ph-fill ph-browser',
+      'docs':         'ph-fill ph-books',
+      'legal':        'ph-fill ph-scales',
+      'infra':        'ph-fill ph-gear-six',
+      'conteudo':     'ph-fill ph-newspaper',
+      'automacao':    'ph-fill ph-robot',
+      'dashboard':    'ph-fill ph-chart-bar',
+      'api':          'ph-fill ph-code',
+      'ia':           'ph-fill ph-brain',
+      'geral':        'ph-fill ph-cube',
+    };
+
+    const CATEGORY_COLORS = {
+      'landing-page': '',
+      'docs':         'orange',
+      'legal':        'blue',
+      'infra':        'purple',
+      'automacao':    'orange',
+      'ia':           'purple',
+    };
+
+    const STATUS_LABELS = {
+      'concluido':    'Concluido',
+      'em-andamento': 'Em Andamento',
+      'ideia':        'Ideia',
+      'pausado':      'Pausado',
+    };
+
+    let projects = [];
+    let activeFilter = 'all';
+    let searchQuery = '';
+
+    async function loadProjects() {
+      const res  = await fetch('projects.json?t=' + Date.now());
+      const data = await res.json();
+      projects = data.projects || [];
+      updateStats();
+      render();
+    }
+
+    function updateStats() {
+      document.getElementById('statTotal').textContent = projects.length;
+      document.getElementById('statDone').textContent  = projects.filter(p => p.status === 'concluido').length;
+      document.getElementById('statWip').textContent   = projects.filter(p => p.status === 'em-andamento').length;
+      document.getElementById('statIdea').textContent  = projects.filter(p => p.status === 'ideia').length;
+    }
+
+    function render() {
+      const grid = document.getElementById('projectGrid');
+      let list = projects;
+
+      if (activeFilter !== 'all') {
+        list = list.filter(p => p.status === activeFilter);
+      }
+      if (searchQuery) {
+        const q = searchQuery.toLowerCase();
+        list = list.filter(p =>
+          p.name.toLowerCase().includes(q) ||
+          p.description.toLowerCase().includes(q) ||
+          (p.category || '').toLowerCase().includes(q)
+        );
+      }
+
+      if (!list.length) {
+        grid.innerHTML = `
+          <div class="empty">
+            <i class="ph-bold ph-folder-open"></i>
+            <p>Nenhum projeto encontrado.</p>
+          </div>`;
+        return;
+      }
+
+      grid.innerHTML = list.map(renderCard).join('');
+    }
+
+    function renderCard(p) {
+      const icon     = CATEGORY_ICONS[p.category] || 'ph-fill ph-cube';
+      const iconClass = CATEGORY_COLORS[p.category] || '';
+      const label    = STATUS_LABELS[p.status] || p.status;
+      const catLabel = (p.category || 'geral').replace('-', ' ');
+
+      const links = [
+        p.url  ? `<a class="card-link" href="${p.url}"  target="_blank" rel="noopener"><i class="ph-bold ph-arrow-square-out"></i> Ver</a>` : '',
+        p.repo ? `<a class="card-link" href="${p.repo}" target="_blank" rel="noopener"><i class="ph-fill ph-github-logo"></i> Repo</a>` : ''
+      ].filter(Boolean).join('');
+
+      return `
+        <article class="card">
+          <div class="card-top">
+            <div class="card-icon ${iconClass}"><i class="${icon}"></i></div>
+            <span class="badge badge-${p.status}">${label}</span>
+          </div>
+          <div class="card-name">${p.name}</div>
+          <div class="card-desc">${p.description}</div>
+          <div class="card-meta">
+            <span class="category-chip">
+              <i class="ph-bold ph-tag"></i>${catLabel}
+            </span>
+            <div class="card-links">${links}</div>
+            <span class="card-date">${p.created_at}</span>
+          </div>
+        </article>`;
+    }
+
+    // Filters
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeFilter = btn.dataset.filter;
+        render();
+      });
+    });
+
+    // Search
+    document.getElementById('searchInput').addEventListener('input', e => {
+      searchQuery = e.target.value;
+      render();
+    });
+
+    loadProjects();
+  </script>
+
+</body>
+</html>

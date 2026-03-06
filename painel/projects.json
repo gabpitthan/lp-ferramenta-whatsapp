@@ -1,0 +1,70 @@
+{
+  "projects": [
+    {
+      "id": "1",
+      "name": "Landing Page Konnex",
+      "description": "Home page principal da plataforma Konnex. Seções de Hero, Integrações, Features Bento, Casos de Uso, Precificação, Depoimentos e FAQ. Deploy automático via Netlify.",
+      "status": "concluido",
+      "category": "landing-page",
+      "url": "https://konnex.app",
+      "repo": "https://github.com/gabpitthan/lp-ferramenta-whatsapp",
+      "created_at": "2026-03-06",
+      "updated_at": "2026-03-06"
+    },
+    {
+      "id": "2",
+      "name": "Documentação Konnex",
+      "description": "Portal de documentação com sidebar navegável, blocos de código com botão copiar, callouts de alerta, table of contents e paginação. Design system próprio (docs.css).",
+      "status": "concluido",
+      "category": "docs",
+      "url": "https://konnex.app/docs/",
+      "repo": "https://github.com/gabpitthan/lp-ferramenta-whatsapp",
+      "created_at": "2026-03-06",
+      "updated_at": "2026-03-06"
+    },
+    {
+      "id": "3",
+      "name": "Política de Privacidade",
+      "description": "Página de privacidade completa com estrutura legal em PT-BR, navegação âncora e layout responsivo seguindo o design system Konnex.",
+      "status": "concluido",
+      "category": "legal",
+      "url": "https://konnex.app/privacidade/",
+      "repo": "https://github.com/gabpitthan/lp-ferramenta-whatsapp",
+      "created_at": "2026-03-06",
+      "updated_at": "2026-03-06"
+    },
+    {
+      "id": "4",
+      "name": "Termos de Serviço",
+      "description": "Página de termos de serviço com cláusulas em PT-BR, índice clicável e estrutura jurídica para SaaS B2B.",
+      "status": "concluido",
+      "category": "legal",
+      "url": "https://konnex.app/termos-servico/",
+      "repo": "https://github.com/gabpitthan/lp-ferramenta-whatsapp",
+      "created_at": "2026-03-06",
+      "updated_at": "2026-03-06"
+    },
+    {
+      "id": "5",
+      "name": "Termos de Uso",
+      "description": "Página de termos de uso da plataforma com seções de aceitação, responsabilidades do usuário e condições de cancelamento.",
+      "status": "concluido",
+      "category": "legal",
+      "url": "https://konnex.app/termos-uso/",
+      "repo": "https://github.com/gabpitthan/lp-ferramenta-whatsapp",
+      "created_at": "2026-03-06",
+      "updated_at": "2026-03-06"
+    },
+    {
+      "id": "6",
+      "name": "Painel de Projetos",
+      "description": "Dashboard pessoal de acompanhamento de todos os projetos desenvolvidos com Claude Code. Auto-commit no GitHub e deploy automático via Netlify.",
+      "status": "em-andamento",
+      "category": "infra",
+      "url": "https://konnex.app/painel/",
+      "repo": "https://github.com/gabpitthan/lp-ferramenta-whatsapp",
+      "created_at": "2026-03-06",
+      "updated_at": "2026-03-06"
+    }
+  ]
+}
