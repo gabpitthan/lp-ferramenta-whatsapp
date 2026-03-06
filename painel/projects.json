@@ -1,45 +1,67 @@
 {
+  "tools": [
+    {
+      "id": "t1",
+      "name": "Gerador de Carrossel",
+      "description": "Crie carrosseis visuais para Instagram e LinkedIn com IA. Gera slides prontos para publicar.",
+      "icon": "ph-fill ph-images",
+      "color": "purple",
+      "path": "../carrossel/",
+      "status": "em-breve",
+      "category": "conteudo"
+    },
+    {
+      "id": "t2",
+      "name": "Documentacao Konnex",
+      "description": "Portal de documentacao tecnica da plataforma com sidebar navegavel e blocos de codigo.",
+      "icon": "ph-fill ph-books",
+      "color": "blue",
+      "path": "../docs/",
+      "status": "ativo",
+      "category": "docs"
+    }
+  ],
   "projects": [
     {
       "id": "1",
       "name": "Landing Page Konnex",
-      "description": "Home page principal da plataforma Konnex. Seções de Hero, Integrações, Features Bento, Casos de Uso, Precificação, Depoimentos e FAQ. Deploy automático via Netlify.",
+      "description": "Home page principal da plataforma. Hero, Integracoes, Bento Features, Pricing, FAQ e formulario de conversao com webhook.",
       "status": "concluido",
       "category": "landing-page",
-      "url": "https://konnex.app",
+      "path": "../",
       "repo": "https://github.com/gabpitthan/lp-ferramenta-whatsapp",
       "created_at": "2026-03-06",
       "updated_at": "2026-03-06"
     },
     {
       "id": "2",
-      "name": "Documentação Konnex",
-      "description": "Portal de documentação com sidebar navegável, blocos de código com botão copiar, callouts de alerta, table of contents e paginação. Design system próprio (docs.css).",
+      "name": "Documentacao Konnex",
+      "description": "Portal de documentacao com sidebar navegavel, blocos de codigo com botao copiar, callouts e paginacao.",
       "status": "concluido",
       "category": "docs",
-      "url": "https://konnex.app/docs/",
+      "path": "../docs/",
       "repo": "https://github.com/gabpitthan/lp-ferramenta-whatsapp",
       "created_at": "2026-03-06",
       "updated_at": "2026-03-06"
     },
     {
       "id": "3",
-      "name": "Política de Privacidade",
-      "description": "Página de privacidade completa com estrutura legal em PT-BR, navegação âncora e layout responsivo seguindo o design system Konnex.",
+      "name": "Politica de Privacidade",
+      "description": "Pagina de privacidade completa com estrutura legal em PT-BR e navegacao ancora.",
       "status": "concluido",
       "category": "legal",
-      "url": "https://konnex.app/privacidade/",
+      "path": "../privacidade/",
       "repo": "https://github.com/gabpitthan/lp-ferramenta-whatsapp",
       "created_at": "2026-03-06",
       "updated_at": "2026-03-06"
     },
     {
       "id": "4",
-      "name": "Termos de Serviço",
-      "description": "Página de termos de serviço com cláusulas em PT-BR, índice clicável e estrutura jurídica para SaaS B2B.",
+      "name": "Termos de Servico",
+      "description": "Termos de servico com clausulas em PT-BR, indice clicavel e estrutura juridica para SaaS B2B.",
       "status": "concluido",
       "category": "legal",
-      "url": "https://konnex.app/termos-servico/",
+      "path": "../termos-servico/",
       "repo": "https://github.com/gabpitthan/lp-ferramenta-whatsapp",
       "created_at": "2026-03-06",
       "updated_at": "2026-03-06"
@@ -47,21 +69,21 @@
     {
       "id": "5",
       "name": "Termos de Uso",
-      "description": "Página de termos de uso da plataforma com seções de aceitação, responsabilidades do usuário e condições de cancelamento.",
+      "description": "Termos de uso com secoes de aceitacao, responsabilidades do usuario e condicoes de cancelamento.",
       "status": "concluido",
       "category": "legal",
-      "url": "https://konnex.app/termos-uso/",
+      "path": "../termos-uso/",
       "repo": "https://github.com/gabpitthan/lp-ferramenta-whatsapp",
       "created_at": "2026-03-06",
       "updated_at": "2026-03-06"
     },
     {
       "id": "6",
-      "name": "Painel de Projetos",
-      "description": "Dashboard pessoal de acompanhamento de todos os projetos desenvolvidos com Claude Code. Auto-commit no GitHub e deploy automático via Netlify.",
+      "name": "Painel de Controle",
+      "description": "Dashboard SaaS central para acesso a ferramentas, projetos e paginas. Auto-deploy via Netlify.",
       "status": "em-andamento",
       "category": "infra",
-      "url": "https://konnex.app/painel/",
+      "path": "./",
       "repo": "https://github.com/gabpitthan/lp-ferramenta-whatsapp",
       "created_at": "2026-03-06",
       "updated_at": "2026-03-06"
