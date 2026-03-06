@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Konnex - Call Comercial V4 Neural</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Syne:wght@700;800&family=JetBrains+Mono&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="../styles.css">
+
+  <style>
+    /* Reset & Snap Scrolling */
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: var(--navy);
+      overflow-x: hidden;
+    }
+
+    html {
+      scroll-snap-type: y mandatory;
+      scroll-behavior: smooth;
+    }
+
+    .slide {
+      scroll-snap-align: start;
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      padding: 0 5vw;
+      box-sizing: border-box;
+    }
+
+    ::-webkit-scrollbar {
+      width: 0px;
+      background: transparent;
+    }
+
+    /* Theming Gerais */
+    .slide-dark {
+      background: var(--navy);
+      color: #fff;
+    }
+
+    .slide-mid {
+      background: var(--navy-mid);
+      color: #fff;
+    }
+
+    .slide-light {
+      background: #fff;
+      color: var(--navy);
+    }
+
+    .slide-gray {
+      background: var(--gray-50);
+      color: var(--navy);
+    }
+
+    .slide-content-wrap {
+      max-width: 1400px;
+      width: 100%;
+      margin: 0 auto;
+      position: relative;
+      z-index: 10;
+    }
+
+    /* Tipografia de Apresentação */
+    .slide-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      line-height: 1.1;
+      margin-bottom: 24px;
+      letter-spacing: -0.02em;
+    }
+
+    .slide-dark .slide-title,
+    .slide-mid .slide-title {
+      color: #fff;
+    }
+
+    .slide-subtitle {
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(1.2rem, 2vw, 1.6rem);
+      color: rgba(255, 255, 255, 0.7);
+      line-height: 1.5;
+      font-weight: 500;
+    }
+
+    .slide-light .slide-subtitle,
+    .slide-gray .slide-subtitle {
+      color: var(--gray-600);
+    }
+
+    .highlight-emerald {
+      color: var(--emerald-light);
+    }
+
+    .highlight-orange {
+      color: var(--orange);
+    }
+
+    /* Estruturas visuais de suporte */
+    .script-block {
+      background: rgba(11, 22, 40, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 40px;
+      border-radius: 20px;
+      margin-top: 40px;
+      backdrop-filter: blur(10px);
+    }
+
+    .pres-split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5vw;
+      align-items: start;
+      margin-top: 40px;
+    }
+
+    .pres-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .pres-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      font-size: 1.3rem;
+      color: rgba(255, 255, 255, 0.85);
+      line-height: 1.5;
+    }
+
+    .slide-light .pres-list li,
+    .slide-gray .pres-list li {
+      color: var(--gray-700);
+    }
+
+    .check-icon {
+      color: var(--emerald-light);
+      font-size: 1.5rem;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .alert-icon {
+      color: var(--orange);
+      font-size: 1.5rem;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .giant-number {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(3rem, 6vw, 5rem);
+      color: var(--orange);
+      line-height: 1;
+      margin-bottom: 10px;
+    }
+
+    .concept-box {
+      padding: 30px;
+      border-radius: 16px;
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .slide-light .concept-box {
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+    }
+
+    /* Navegação Direita */
+    .slide-nav {
+      position: fixed;
+      right: 2vw;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 1000;
+    }
+
+    .nav-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+
+    .nav-dot.active {
+      background: var(--emerald-light);
+      transform: scale(1.5);
+      box-shadow: 0 0 10px rgba(18, 200, 122, 0.4);
+    }
+
+    .slide-light~.slide-nav .nav-dot,
+    .slide-gray~.slide-nav .nav-dot {
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    /* Roteiro do Apresentador (Teleprompter V4) */
+    .presenter-notes {
+      position: fixed;
+      bottom: 30px;
+      left: 30px;
+      width: 500px;
+      max-height: 50vh;
+      overflow-y: auto;
+      z-index: 9999;
+      background: rgba(11, 22, 40, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-left: 4px solid var(--emerald-light);
+      padding: 25px;
+      border-radius: 12px;
+      color: #fff;
+      display: none;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .presenter-notes h4 {
+      color: var(--emerald-light);
+      margin: 0 0 15px 0;
+      font-family: 'Syne', sans-serif;
+      font-size: 1.2rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .p-script {
+      margin-bottom: 15px;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .p-action {
+      color: var(--orange);
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .shortcut-hint {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.4);
+      z-index: 1000;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .badge-principle {
+      display: inline-block;
+      padding: 6px 16px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 100px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 24px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .badge-emerald {
+      background: rgba(10, 135, 84, 0.15);
+      color: var(--emerald-light);
+      border-color: rgba(10, 135, 84, 0.3);
+    }
+
+    .badge-orange {
+      background: rgba(255, 107, 53, 0.1);
+      color: var(--orange);
+      border-color: rgba(255, 107, 53, 0.2);
+    }
+
+    /* Centralized blocks */
+    .center-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    /* Modo Desenho (Canvas Fixo 100vh para evitar Crash de Textura) */
+    #drawCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9998;
+    }
+
+    #drawCanvas.active {
+      pointer-events: auto;
+      cursor: crosshair;
+      touch-action: none;
+      /* Previne bug de scroll mobile/trackpad enquanto risca */
+    }
+
+    #drawCanvas.eraser-mode {
+      cursor: alias;
+    }
+
+    /* Barra de Ferramentas de Desenho Flutuante */
+    .draw-tools {
+      position: fixed;
+      top: 30px;
+      right: 30px;
+      background: rgba(11, 22, 40, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 100px;
+      padding: 8px;
+      display: none;
+      /* Só mostra quando aperta D */
+      gap: 10px;
+      z-index: 9999;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(10px);
+    }
+
+    .draw-tools.visible {
+      display: flex;
+    }
+
+    .tool-btn {
+      background: transparent;
+      border: none;
+      color: rgba(255, 255, 255, 0.6);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      font-size: 1.2rem;
+    }
+
+    .tool-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .tool-btn.active-tool {
+      background: var(--emerald-glow);
+      color: var(--emerald-light);
+      border: 1px solid var(--emerald-light);
+    }
+
+    /* Neural Mouse Glow & Trail */
+    .mouse-trail {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 400px;
+      height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(18, 200, 122, 0.45) 0%, rgba(18, 200, 122, 0) 60%);
+      pointer-events: none;
+      z-index: 1;
+      /* Atrás de tudo */
+      transform: translate(-50%, -50%);
+      mix-blend-mode: screen;
+      will-change: transform, opacity;
+      /* O fade-out é controlado via JS + transition */
+      transition: opacity 1.5s ease-out, transform 0.2s linear;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Canvas de Desenho -->
+  <canvas id="drawCanvas"></canvas>
+
+  <!-- Toolbar de Desenho -->
+  <div class="draw-tools" id="drawToolbar">
+    <button class="tool-btn active-tool" id="btnPen" title="Caneta">🖌️</button>
+    <button class="tool-btn" id="btnEraser" title="Borracha">🧽</button>
+    <div style="width: 1px; background: rgba(255,255,255,0.2); margin: 5px 0;"></div>
+    <button class="tool-btn trash-btn" id="btnClear" title="Apagar Tudo">🗑️</button>
+  </div>
+
+  <!-- Dica P/ Roteiro -->
+  <div class="shortcut-hint">Pressione <strong>'N'</strong> p/ Script | <strong>'D'</strong> p/ Modo Tela</div>
+
+  <!-- Navegação -->
+  <div class="slide-nav" id="slideNav">
+    <div class="nav-dot active" data-target="1"></div>
+    <div class="nav-dot" data-target="2"></div>
+    <div class="nav-dot" data-target="3"></div>
+    <div class="nav-dot" data-target="4"></div>
+    <div class="nav-dot" data-target="5"></div>
+    <div class="nav-dot" data-target="6"></div>
+    <div class="nav-dot" data-target="7"></div>
+    <div class="nav-dot" data-target="8"></div>
+    <div class="nav-dot" data-target="9"></div>
+    <div class="nav-dot" data-target="10"></div>
+    <div class="nav-dot" data-target="11"></div>
+    <div class="nav-dot" data-target="12"></div>
+  </div>
+
+  <!-- Roteiro (POPUP) -->
+  <div class="presenter-notes" id="presenterNotes">
+    <h4 id="noteTitle">Script</h4>
+    <div id="noteContent"></div>
+  </div>
+
+  <!-- BANCO DE DADOS DO SCRIPT V4 NEURAL -->
+  <script>
+    const scriptNotes = {
+      1: {
+        title: "1️⃣ ABERTURA – POSICIONAMENTO",
+        html: `
+          <div class="p-action">Slide limpo. Você não pede permissão. Você conduz. (3 min)</div>
+          <div class="p-script">"Essa <strong>não é</strong> uma apresentação comercial padrão."</div>
+          <div class="p-script">"Vou te mostrar <strong>dois problemas</strong> que silenciosamente travam o crescimento da maioria das empresas."</div>
+          <div class="p-script">"Se fizer sentido, a gente fala de solução e arquitetura."</div>
+        `
+      },
+      2: {
+        title: "2️⃣ PROBLEMA ESTRUTURAL – DESORGANIZAÇÃO (Parte 1)",
+        html: `
+          <div class="p-action">Você começa pelo mercado. (10 min)</div>
+          <div class="p-script">"A maioria das empresas não trava por falta de cliente."</div>
+          <div class="p-script">"Trava por falta de estrutura."</div>
+          <div class="p-script">"Lead entra. Atendimento começa. A conversa acontece. <strong>Mas não existe sistema.</strong>"</div>
+          <div class="p-script">"Existe esforço. E esforço não escala."</div>
+        `
+      },
+      3: {
+        title: "3️⃣ PROBLEMA ESTRUTURAL – DESORGANIZAÇÃO (Parte 2)",
+        html: `
+          <div class="p-action">Atendimento reativo. Leia as dores do prospect.</div>
+          <div class="p-script">"Atendimento reativo: Depende de alguém lembrar. Depende da boa vontade. Depende da energia do dia. Depende da memória."</div>
+          <div class="p-action">[PERGUNTA ESTRATÉGICA]</div>
+          <div class="p-script">"Hoje sua operação funciona mais por processo... ou por esforço da equipe?"</div>
+          <div class="p-action">[SILÊNCIO] Se disser esforço:</div>
+          <div class="p-script">"Então você não tem operação estruturada. Você tem operação dependente de energia humana." [Pausa]</div>
+        `
+      },
+      4: {
+        title: "4️⃣ CONSEQUÊNCIA REAL (CUSTO INVISÍVEL)",
+        html: `
+          <div class="p-action">Isso gera dor real. Use tom assertivo.</div>
+          <div class="p-script">"Isso gera: Lead perdido. Follow-up inexistente. Conversão instável. Falta de previsibilidade. Crescimento limitado."</div>
+          <div class="p-action">[FRASE DE TENSÃO]</div>
+          <div class="p-script">"E o pior… Você nem consegue medir quanto está deixando de ganhar."</div>
+        `
+      },
+      5: {
+        title: "5️⃣ SEGUNDO PROBLEMA – O RISCO",
+        html: `
+          <div class="p-action">Agora você muda a energia. Mais sério, mais devagar.</div>
+          <div class="p-script">"Tem um segundo problema ainda mais perigoso."</div>
+          <div class="p-script">"A maioria das empresas usa WhatsApp comum ou API não oficial. E vive sob risco constante."</div>
+          <div class="p-script">"Seu número de WhatsApp é um ativo empresarial. Ele é sua linha principal de vendas, central de atendimento, porta de entrada."</div>
+          <div class="p-script">"<strong>Agora imagine perder isso. Sem aviso.</strong>"</div>
+        `
+      },
+      6: {
+        title: "6️⃣ AMPLIFICAÇÃO DO RISCO",
+        html: `
+          <div class="p-action">Deixe a dor ser sentida.</div>
+          <div class="p-script">"Quando o número cai: Atendimento para. Vendas param. Leads se perdem. Histórico desaparece. Cliente perde confiança."</div>
+          <div class="p-script">"E você não tem controle. Isso não é detalhe técnico. <strong>É risco financeiro.</strong>"</div>
+          <div class="p-action">[SILÊNCIO]</div>
+        `
+      },
+      7: {
+        title: "7️⃣ QUEBRA DE CRENÇA",
+        html: `
+          <div class="p-action">Você cria tensão lógica.</div>
+          <div class="p-script">"A maioria das empresas acha que o problema é vender mais."</div>
+          <div class="p-script">"Mas não percebe que está operando com: <strong>Desorganização e Vulnerabilidade</strong>."</div>
+        `
+      },
+      8: {
+        title: "8️⃣ TRANSIÇÃO – EXISTE OUTRA FORMA",
+        html: `
+          <div class="p-action">Dopamine Release. Alívio de tensão.</div>
+          <div class="p-script">"Existe uma forma de transformar o WhatsApp em: Estrutura. Sistema. Ativo protegido."</div>
+          <div class="p-script">"Sem improviso. Sem risco. Sem dependência de sorte."</div>
+        `
+      },
+      9: {
+        title: "9️⃣ APRESENTAÇÃO DA SOLUÇÃO (ARQUITETURA)",
+        html: `
+          <div class="p-action">Não é lista de funções, é arquitetura de conversão.</div>
+          <div class="p-script">"Nós implantamos o Sistema Operacional via WhatsApp. Estruturamos: Organização total dos contatos, Entrada automática com direcionamento, Setorização da equipe, Follow-up automático, Recuperação de oportunidades e Métricas reais."</div>
+          <div class="p-script">"Mas tem uma parte crítica aqui."</div>
+        `
+      },
+      10: {
+        title: "1️⃣0️⃣ BLINDAGEM DO ATIVO – API OFICIAL",
+        html: `
+          <div class="p-action">A virada técnica como segurança de negócio.</div>
+          <div class="p-script">"Nós fazemos o cadastro da API Oficial do WhatsApp. Ambiente empresarial homologado."</div>
+          <div class="p-script">"Mais estável. Sem quedas. Sem bloqueios aleatórios. Sem risco de perder número."</div>
+          <div class="p-script">"<strong>Seu WhatsApp deixa de ser aplicativo. E vira infraestrutura empresarial.</strong> Essa é a virada."</div>
+        `
+      },
+      11: {
+        title: "1️⃣1️⃣ VISÃO DE FUTURO",
+        html: `
+          <div class="p-action">Mental Simulation. Peak-End Rule.</div>
+          <div class="p-script">"Imagina operar assim: Número protegido. Atendimento organizado. Follow-ups automáticos. Conversão acompanhada. Equipe com padrão. Dados para decisão."</div>
+          <div class="p-script">"<strong>Você sai do improviso. E entra em previsibilidade.</strong>"</div>
+        `
+      },
+      12: {
+        title: "💎 OFERTA – IMPLANTAÇÃO",
+        html: `
+          <div class="p-action">Âncora. O investimento para fechar a torneira.</div>
+          <div class="p-script">"Para estruturar isso no seu negócio, fazemos: Diagnóstico, Arquitetura, Cadastro API Oficial, Configuração, Testes internos, Treinamento da equipe e Ativação assistida."</div>
+          <div class="p-script">"E então você apresenta o investimento."</div>
+          <div class="p-action">[SILÊNCIO ABSOLUTO]. Não justifica. Não negocia antes da reação.</div>
+        `
+      }
+    };
+  </script>
+
+  <!-- ==========================================
+       SLIDES DA APRESENTAÇÃO (11-STEP V4 NEURAL)
+  =========================================== -->
+
+  <!-- 1️⃣ ABERTURA – POSICIONAMENTO -->
+  <section class="slide slide-dark center-content" id="s1">
+    <div class="slide-content-wrap center-content">
+      <div class="badge-principle badge-emerald">Alinhamento Estratégico</div>
+      <h1 class="slide-title">Essa não é uma<br>apresentação comercial.</h1>
+      <p class="slide-subtitle" style="max-width: 800px; text-align: center;">
+        Vou te mostrar <strong>dois problemas</strong> que silenciosamente travam o crescimento da maioria das
+        empresas.<br><br>Se fizer sentido, a gente fala de solução.
+      </p>
+    </div>
+  </section>
+
+  <!-- 2️⃣ PROBLEMA ESTRUTURAL – DESORGANIZAÇÃO (Parte 1) -->
+  <section class="slide slide-mid" id="s2">
+    <div class="slide-content-wrap">
+      <h2 class="slide-title">Por que as operações <span class="highlight-orange">travam?</span></h2>
+      <p class="slide-subtitle">A ilusão do esforço escalável.</p>
+
+      <div class="script-block" style="max-width: 900px; margin-top: 50px;">
+        <p style="font-size: 1.5rem; color: #fff; line-height: 1.6; margin-bottom: 20px;">
+          "A maioria das empresas não trava por falta de cliente. Trava por falta de <strong>estrutura</strong>."
+        </p>
+        <ul class="pres-list" style="margin-top: 30px; gap: 15px;">
+          <li><span class="alert-icon">»</span> Lead entra.</li>
+          <li><span class="alert-icon">»</span> Atendimento começa.</li>
+          <li><span class="alert-icon">»</span> A conversa acontece.</li>
+        </ul>
+        <p
+          style="font-size: 1.6rem; color: var(--orange); font-family: 'Syne', sans-serif; font-weight: 800; margin-top: 30px;">
+          Mas não existe sistema. Existe esforço.<br>E esforço não escala.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3️⃣ PROBLEMA ESTRUTURAL – DESORGANIZAÇÃO (Parte 2) -->
+  <section class="slide slide-dark" id="s3">
+    <div class="slide-content-wrap">
+      <h2 class="slide-title">O Atendimento <span class="highlight-orange">Reativo</span></h2>
+
+      <div class="pres-split" style="gap: 4vw; margin-top: 50px; align-items: center;">
+        <div>
+          <ul class="pres-list">
+            <li><span class="alert-icon">✖</span> Depende de alguém lembrar</li>
+            <li><span class="alert-icon">✖</span> Depende da boa vontade</li>
+            <li><span class="alert-icon">✖</span> Depende da energia do dia</li>
+            <li><span class="alert-icon">✖</span> Depende da memória</li>
+          </ul>
+        </div>
+
+        <div class="concept-box" style="background: rgba(255,107,53,0.1); border: 1px solid rgba(255,107,53,0.3);">
+          <p
+            style="font-size: 1.2rem; color: rgba(255,255,255,0.8); line-height: 1.6; margin-bottom: 20px; text-align: center;">
+            Hoje sua operação funciona mais por processo... ou por esforço da equipe?
+          </p>
+          <div
+            style="font-family: 'Syne', sans-serif; font-size: 1.5rem; color: var(--orange); font-weight: 800; text-align: center;">
+            Se é por esforço: Você não tem operação estruturada. Você tem dependência de energia humana.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4️⃣ CONSEQUÊNCIA REAL (CUSTO INVISÍVEL) -->
+  <section class="slide slide-dark center-content" id="s4">
+    <div class="slide-content-wrap center-content">
+      <div class="badge-principle badge-orange" style="border-color: rgba(255, 107, 53, 0.4);">O Custo da Inação</div>
+      <h2 class="slide-title" style="color: #fff;">Isso gera...</h2>
+
+      <div
+        style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; margin: 40px 0; max-width: 800px;">
+        <span
+          style="background: rgba(255, 107, 53, 0.15); color: #fff; padding: 12px 24px; border-radius: 100px; font-weight: 600; font-size: 1.2rem; border: 1px solid rgba(255,107,53,0.3);">Lead
+          perdido</span>
+        <span
+          style="background: rgba(255, 107, 53, 0.15); color: #fff; padding: 12px 24px; border-radius: 100px; font-weight: 600; font-size: 1.2rem; border: 1px solid rgba(255,107,53,0.3);">Follow-up
+          inexistente</span>
+        <span
+          style="background: rgba(255, 107, 53, 0.15); color: #fff; padding: 12px 24px; border-radius: 100px; font-weight: 600; font-size: 1.2rem; border: 1px solid rgba(255,107,53,0.3);">Conversão
+          instável</span>
+        <span
+          style="background: rgba(255, 107, 53, 0.15); color: #fff; padding: 12px 24px; border-radius: 100px; font-weight: 600; font-size: 1.2rem; border: 1px solid rgba(255,107,53,0.3);">Falta
+          de previsibilidade</span>
+        <span
+          style="background: rgba(255, 107, 53, 0.15); color: #fff; padding: 12px 24px; border-radius: 100px; font-weight: 600; font-size: 1.2rem; border: 1px solid rgba(255,107,53,0.3);">Crescimento
+          limitado</span>
+      </div>
+
+      <p
+        style="font-family: 'Syne', sans-serif; font-size: 2.5rem; color: var(--orange); font-weight: 800; margin-top: 20px;">
+        E o pior...
+      </p>
+      <p style="font-size: 1.6rem; color: var(--gray-700); font-weight: 600; margin-top: 10px;">
+        Você nem consegue medir quanto está deixando de ganhar.
+      </p>
+    </div>
+  </section>
+
+  <!-- 5️⃣ SEGUNDO PROBLEMA – O RISCO QUE NINGUÉM FALA -->
+  <section class="slide slide-dark" id="s5">
+    <div class="slide-content-wrap">
+      <h2 class="slide-title">Tem um segundo problema ainda mais <span class="highlight-orange">perigoso.</span></h2>
+      <p class="slide-subtitle" style="margin-bottom: 50px;">A maioria das empresas usa WhatsApp comum ou API não
+        oficial. E vive sob risco constante.</p>
+
+      <div class="pres-split" style="grid-template-columns: 1fr;">
+        <div class="script-block" style="background: rgba(255, 107, 53, 0.05); border-color: rgba(255, 107, 53, 0.2);">
+          <ul class="pres-list" style="gap: 20px;">
+            <li><span class="check-icon" style="color:var(--orange);">»</span> Seu número de WhatsApp é um ativo
+              empresarial.</li>
+            <li><span class="check-icon" style="color:var(--orange);">»</span> Ele é sua linha principal de vendas.</li>
+            <li><span class="check-icon" style="color:var(--orange);">»</span> Sua central de atendimento.</li>
+            <li><span class="check-icon" style="color:var(--orange);">»</span> Sua porta de entrada.</li>
+          </ul>
+          <p
+            style="font-family: 'Syne', sans-serif; font-size: 2rem; color: #fff; margin-top: 40px; text-align: center;">
+            Agora imagine perder isso. <strong style="color: var(--orange);">Sem aviso.</strong>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6️⃣ AMPLIFICAÇÃO DO RISCO -->
+  <section class="slide slide-mid center-content" id="s6">
+    <div class="slide-content-wrap center-content">
+      <h2 class="slide-title">Quando o <span class="highlight-orange">número cai:</span></h2>
+
+      <ul class="pres-list"
+        style="margin: 40px 0; max-width: 600px; text-align: left; background: rgba(0,0,0,0.2); padding: 40px; border-radius: 20px;">
+        <li><span class="alert-icon">⚠️</span> Atendimento para</li>
+        <li><span class="alert-icon">⚠️</span> Vendas param</li>
+        <li><span class="alert-icon">⚠️</span> Leads se perdem</li>
+        <li><span class="alert-icon">⚠️</span> Histórico desaparece</li>
+        <li><span class="alert-icon">⚠️</span> Cliente perde confiança</li>
+      </ul>
+
+      <p style="font-size: 1.6rem; color: #fff; line-height: 1.5;">
+        E você não tem controle.<br>
+        Isso não é detalhe técnico. <strong style="color: var(--emerald-light);">É risco financeiro.</strong>
+      </p>
+    </div>
+  </section>
+
+  <!-- 7️⃣ QUEBRA DE CRENÇA -->
+  <section class="slide slide-dark center-content" id="s7">
+    <div class="hero-bg">
+      <div class="grid-overlay" style="opacity: 0.2;"></div>
+    </div>
+    <div class="slide-content-wrap center-content">
+      <h2 class="slide-title" style="font-size: clamp(3rem, 6vw, 5rem);">A Quebra de <span
+          class="highlight-emerald">Crença</span></h2>
+
+      <p style="font-size: 1.8rem; color: rgba(255,255,255,0.7); max-width: 900px; line-height: 1.6; margin-top: 40px;">
+        A maioria das empresas acha que o problema é <strong>vender mais.</strong><br><br>
+        Mas não percebe que está operando com:<br>
+      </p>
+
+      <div
+        style="font-family: 'Syne', sans-serif; font-size: clamp(3rem, 6vw, 4.5rem); font-weight: 800; color: var(--orange); line-height: 1.2; margin-top: 30px;">
+        Desorganização<br>
+        <span style="font-size: 2rem; color: rgba(255,255,255,0.5);">e</span><br>
+        Vulnerabilidade
+      </div>
+    </div>
+  </section>
+
+  <!-- 8️⃣ TRANSIÇÃO – EXISTE OUTRA FORMA -->
+  <section class="slide slide-dark center-content" id="s8">
+    <div class="slide-content-wrap center-content">
+      <h2 class="slide-title" style="color: #fff;">Existe <span class="highlight-emerald"
+          style="color: var(--emerald-light);">Outra Forma</span></h2>
+
+      <p
+        style="font-size: 1.8rem; color: rgba(255,255,255,0.7); max-width: 900px; line-height: 1.6; margin-top: 40px; margin-bottom: 40px;">
+        Existe uma forma de transformar o WhatsApp em:
+      </p>
+
+      <div style="display: flex; gap: 30px; justify-content: center; flex-wrap: wrap;">
+        <div class="concept-box"
+          style="text-align: center; min-width: 250px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+          <div style="font-size: 2.5rem; margin-bottom: 10px;">🧱</div>
+          <div style="font-family: 'Syne', sans-serif; font-size: 1.8rem; color: #fff; font-weight: 800;">
+            Estrutura.</div>
+        </div>
+        <div class="concept-box"
+          style="text-align: center; min-width: 250px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+          <div style="font-size: 2.5rem; margin-bottom: 10px;">⚙️</div>
+          <div style="font-family: 'Syne', sans-serif; font-size: 1.8rem; color: #fff; font-weight: 800;">
+            Sistema.</div>
+        </div>
+        <div class="concept-box"
+          style="text-align: center; min-width: 250px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+          <div style="font-size: 2.5rem; margin-bottom: 10px;">🛡️</div>
+          <div style="font-family: 'Syne', sans-serif; font-size: 1.8rem; color: #fff; font-weight: 800;">Ativo
+            protegido.</div>
+        </div>
+      </div>
+
+      <p style="font-size: 1.6rem; color: var(--emerald-dark); font-weight: 700; margin-top: 50px;">
+        Sem improviso. Sem risco. Sem dependência de sorte.
+      </p>
+    </div>
+  </section>
+
+  <!-- 9️⃣ APRESENTAÇÃO DA SOLUÇÃO (ARQUITETURA) -->
+  <section class="slide slide-mid" id="s9">
+    <div class="slide-content-wrap">
+      <div class="badge-principle badge-emerald">A ARQUITETURA. NÃO FERRAMENTA.</div>
+      <h2 class="slide-title">Sistema Operacional <span class="highlight-emerald">Konnex</span></h2>
+
+      <p style="font-size: 1.4rem; color: rgba(255,255,255,0.8); margin-bottom: 40px; max-width: 800px;">
+        Nós implantamos o Sistema Operacional via WhatsApp. Estruturamos:
+      </p>
+
+      <div class="pres-split" style="gap: 3vw; margin-top: 0;">
+        <ul class="pres-list">
+          <li><span class="check-icon">✓</span> Organização total dos contatos</li>
+          <li><span class="check-icon">✓</span> Entrada automática e direcionamento</li>
+          <li><span class="check-icon">✓</span> Setorização da equipe</li>
+        </ul>
+        <ul class="pres-list">
+          <li><span class="check-icon">✓</span> Follow-up automático</li>
+          <li><span class="check-icon">✓</span> Recuperação de oportunidades</li>
+          <li><span class="check-icon">✓</span> Métricas reais de performance</li>
+        </ul>
+      </div>
+
+      <p style="font-family: 'Syne', sans-serif; font-size: 1.8rem; color: var(--orange); margin-top: 60px;">
+        Mas tem uma parte crítica aqui...
+      </p>
+    </div>
+  </section>
+
+  <!-- 🔟 BLINDAGEM DO ATIVO – API OFICIAL -->
+  <section class="slide slide-dark" id="s10">
+    <div class="hero-bg">
+      <div class="orb orb-2"
+        style="background: radial-gradient(circle, rgba(18, 200, 122, 0.15), transparent 60%); width: 900px; height: 900px; left: -100px; bottom: -100px;">
+      </div>
+    </div>
+    <div class="slide-content-wrap">
+      <h2 class="slide-title">Blindagem com<br><span class="highlight-emerald">API Oficial Meta</span></h2>
+
+      <div class="script-block" style="border-color: var(--emerald-glow); background: rgba(11,22,40,0.9);">
+        <p style="font-size: 1.4rem; color: #fff; margin-bottom: 30px; line-height: 1.5;">
+          Nós fazemos o cadastro da API Oficial do WhatsApp. Ambiente empresarial homologado pela própria Meta.
+        </p>
+
+        <ul class="pres-list" style="margin-bottom: 40px; margin-left: 20px;">
+          <li style="font-size: 1.2rem;"><span class="check-icon">»</span> Mais estável.</li>
+          <li style="font-size: 1.2rem;"><span class="check-icon">»</span> Sem quedas inesperadas.</li>
+          <li style="font-size: 1.2rem;"><span class="check-icon">»</span> Sem bloqueios aleatórios.</li>
+          <li style="font-size: 1.2rem;"><span class="check-icon">»</span> Sem risco de perder número.</li>
+        </ul>
+
+        <p style="font-family: 'Syne', sans-serif; font-size: 2.2rem; color: var(--emerald-light); line-height: 1.3;">
+          Seu WhatsApp deixa de ser aplicativo. E vira infraestrutura empresarial.<br>
+          <span
+            style="font-size: 1.5rem; color: rgba(255,255,255,0.7); font-weight: 500; font-family: 'Inter', sans-serif;">Essa
+            é a virada.</span>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 1️⃣1️⃣ VISÃO DE FUTURO (IMPACTO) -->
+  <section class="slide slide-dark center-content" id="s11">
+    <div class="slide-content-wrap center-content">
+      <h2 class="slide-title" style="color: #fff;">Visão de <span style="color: var(--emerald-light);">Futuro</span>
+      </h2>
+      <p class="slide-subtitle">Imagina operar assim amanhã de manhã:</p>
+
+      <div
+        style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin: 40px 0; max-width: 1000px;">
+        <span
+          style="background: rgba(10, 135, 84, 0.1); color: var(--emerald-dark); padding: 15px 30px; border-radius: 100px; font-weight: 600; font-size: 1.1rem;">Número
+          protegido</span>
+        <span
+          style="background: rgba(10, 135, 84, 0.1); color: var(--emerald-dark); padding: 15px 30px; border-radius: 100px; font-weight: 600; font-size: 1.1rem;">Atendimento
+          organizado</span>
+        <span
+          style="background: rgba(10, 135, 84, 0.1); color: var(--emerald-dark); padding: 15px 30px; border-radius: 100px; font-weight: 600; font-size: 1.1rem;">Follow-ups
+          automáticos</span>
+        <span
+          style="background: rgba(10, 135, 84, 0.1); color: var(--emerald-dark); padding: 15px 30px; border-radius: 100px; font-weight: 600; font-size: 1.1rem;">Conversão
+          acompanhada</span>
+        <span
+          style="background: rgba(10, 135, 84, 0.1); color: var(--emerald-dark); padding: 15px 30px; border-radius: 100px; font-weight: 600; font-size: 1.1rem;">Equipe
+          com padrão</span>
+        <span
+          style="background: rgba(10, 135, 84, 0.1); color: var(--emerald-dark); padding: 15px 30px; border-radius: 100px; font-weight: 600; font-size: 1.1rem;">Dados
+          para decisão</span>
+      </div>
+
+      <p
+        style="font-family: 'Syne', sans-serif; font-size: 3rem; color: #fff; font-weight: 800; margin-top: 30px; line-height: 1.2;">
+        Você sai do improviso.<br>
+        <span style="color: var(--emerald-light);">E entra em previsibilidade.</span>
+      </p>
+    </div>
+  </section>
+
+  <!-- 💎 OFERTA – IMPLANTAÇÃO -->
+  <section class="slide slide-dark" id="s12">
+    <div class="slide-content-wrap">
+      <div class="badge-principle badge-emerald" style="border-color: var(--emerald-light);">ARQUITETURA COMPLETA</div>
+      <h2 class="slide-title">Implantação <span class="highlight-emerald">Konnex</span></h2>
+      <p class="slide-subtitle" style="margin-bottom: 40px;">Para estruturar isso no seu negócio, fazemos:</p>
+
+      <div class="pres-split" style="gap: 5vw; margin-top: 0; align-items: stretch;">
+        <div class="concept-box"
+          style="background: rgba(11,22,40,0.8); border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center;">
+          <ul class="pres-list" style="gap: 20px;">
+            <li><span class="check-icon">✓</span> Diagnóstico estratégico</li>
+            <li><span class="check-icon">✓</span> Arquitetura do processo</li>
+            <li><span class="check-icon">✓</span> Cadastro e ativação da API Oficial</li>
+            <li><span class="check-icon">✓</span> Configuração completa</li>
+            <li><span class="check-icon">✓</span> Testes internos</li>
+            <li><span class="check-icon">✓</span> Treinamento da equipe</li>
+            <li><span class="check-icon">✓</span> Ativação oficial assistida</li>
+          </ul>
+        </div>
+
+        <div class="center-content"
+          style="background: rgba(10, 135, 84, 0.05); border: 2px dashed rgba(10, 135, 84, 0.3); border-radius: 20px; padding: 40px;">
+          <div style="font-size: 4rem; margin-bottom: 20px;">💎</div>
+          <div style="font-family: 'Syne', sans-serif; font-size: 2.2rem; color: #fff; margin-bottom: 20px;">O
+            Investimento</div>
+          <p style="font-size: 1.1rem; color: rgba(255,255,255,0.6); line-height: 1.6;">
+            Apresente o investimento aqui.<br><br>
+            <strong style="color: var(--orange); font-size: 1.2rem;">SILÊNCIO.</strong><br>
+            Não justifica. Não negocia antes da reação.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    const navDots = document.querySelectorAll('.nav-dot');
+
+    // Intersection Observer
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const slideId = entry.target.id;
+          const slideNumber = slideId.substring(1);
+
+          navDots.forEach(dot => {
+            dot.classList.remove('active');
+            if (dot.getAttribute('data-target') === slideNumber) {
+              dot.classList.add('active');
+            }
+          });
+
+          // Roteiro Tático V4
+          if (scriptNotes[slideNumber]) {
+            document.getElementById('noteTitle').innerHTML = scriptNotes[slideNumber].title;
+            document.getElementById('noteContent').innerHTML = scriptNotes[slideNumber].html;
+          }
+        }
+      });
+    }, { root: null, threshold: 0.5 });
+
+    slides.forEach(slide => observer.observe(slide));
+
+    navDots.forEach(dot => {
+      dot.addEventListener('click', (e) => {
+        const targetNumber = e.target.getAttribute('data-target');
+        const targetSlide = document.getElementById('s' + targetNumber);
+        targetSlide.scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+
+    // TECLA N (Notas), D (Desenho), ou TECLAS de CIMA/BAIXO (Navegar)
+    document.addEventListener('keydown', (e) => {
+      // Toggle Script 'N'
+      if (e.key.toLowerCase() === 'n') {
+        const panel = document.getElementById('presenterNotes');
+        panel.style.display = (panel.style.display === 'none' || panel.style.display === '') ? 'block' : 'none';
+      }
+
+      // Toggle Draw Mode 'D'
+      if (e.key.toLowerCase() === 'd') {
+        const dCanvas = document.getElementById('drawCanvas');
+        const toolbar = document.getElementById('drawToolbar');
+        dCanvas.classList.toggle('active');
+
+        if (dCanvas.classList.contains('active')) {
+          toolbar.classList.add('visible');
+          setTool('pen');
+        } else {
+          toolbar.classList.remove('visible');
+          isDrawing = false; // Garante que se apertou D enquanto desenhava ele solta o traço
+        }
+      }
+
+      // Toggle Eraser 'E' (Only if drawing is active)
+      if (e.key.toLowerCase() === 'e') {
+        const dCanvas = document.getElementById('drawCanvas');
+        if (dCanvas.classList.contains('active')) {
+          isEraser = !isEraser;
+          setTool(isEraser ? 'eraser' : 'pen');
+        }
+      }
+
+      const activeDot = document.querySelector('.nav-dot.active');
+      let targetNumber = parseInt(activeDot.getAttribute('data-target'));
+
+      if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Enter') {
+        if (targetNumber < slides.length) {
+          e.preventDefault();
+          targetNumber++;
+          document.getElementById('s' + targetNumber).scrollIntoView({ behavior: 'smooth' });
+        }
+      } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+        if (targetNumber > 1) {
+          e.preventDefault();
+          targetNumber--;
+          document.getElementById('s' + targetNumber).scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+    });
+
+    // ==========================================
+    // LÓGICA DE DESENHO NO CANVAS (Realtime Redraw Engine)
+    // ==========================================
+    const drawCanvas = document.getElementById('drawCanvas');
+    const ctx = drawCanvas.getContext('2d');
+    let isDrawing = false;
+    let isEraser = false;
+
+    // Matriz que armazena todos os traços do usuário
+    // Evita criarmos um Canvas de "30.000 pixels" que buga a memória de vídeo do browser com faixa preta
+    let strokes = [];
+    let currentStroke = null;
+
+    // GUI BOTOES DA TOOLBAR
+    const btnPen = document.getElementById('btnPen');
+    const btnEraser = document.getElementById('btnEraser');
+    const btnClear = document.getElementById('btnClear');
+
+    function setTool(tool) {
+      if (tool === 'eraser') {
+        isEraser = true;
+        drawCanvas.classList.add('eraser-mode');
+        btnEraser.classList.add('active-tool');
+        btnPen.classList.remove('active-tool');
+      } else {
+        isEraser = false;
+        drawCanvas.classList.remove('eraser-mode');
+        btnPen.classList.add('active-tool');
+        btnEraser.classList.remove('active-tool');
+      }
+    }
+
+    btnPen.addEventListener('click', () => setTool('pen'));
+    btnEraser.addEventListener('click', () => setTool('eraser'));
+    btnClear.addEventListener('click', () => {
+      strokes = []; // Limpa a matriz
+      redrawCanvas();
+    });
+
+    function resizeCanvas() {
+      drawCanvas.width = window.innerWidth;
+      drawCanvas.height = window.innerHeight; // Canvas do tamanho exato da tela apenas
+      redrawCanvas();
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    window.addEventListener('scroll', () => requestAnimationFrame(redrawCanvas));
+    setTimeout(resizeCanvas, 500);
+
+    // Motor que Redesenha as linhas de acordo com o Scroll da Página
+    function redrawCanvas() {
+      ctx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
+
+      ctx.save();
+      // Move o mundo do canvas pra cima ou pra baixo dependendo do Scroll Real
+      ctx.translate(0, -window.scrollY);
+
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+
+      strokes.forEach(stroke => {
+        if (stroke.points.length === 0) return;
+
+        ctx.beginPath();
+        ctx.moveTo(stroke.points[0].x, stroke.points[0].y);
+
+        for (let i = 1; i < stroke.points.length; i++) {
+          ctx.lineTo(stroke.points[i].x, stroke.points[i].y);
+        }
+
+        if (stroke.tool === 'eraser') {
+          ctx.globalCompositeOperation = 'destination-out';
+          ctx.lineWidth = 40;
+          ctx.shadowBlur = 0;
+        } else {
+          ctx.globalCompositeOperation = 'source-over';
+          ctx.strokeStyle = '#12C87A';
+          ctx.lineWidth = 4;
+          ctx.shadowBlur = 10;
+          ctx.shadowColor = '#12C87A';
+        }
+        ctx.stroke();
+      });
+
+      ctx.restore();
+    }
+
+    function draw(e) {
+      if (!isDrawing || !currentStroke) return;
+
+      // Salvamos sempre a coordenada absoluta real da página Inteira (pageX, pageY)
+      currentStroke.points.push({
+        x: e.pageX,
+        y: e.pageY
+      });
+
+      // Invoca renderização rápida apenas do novo ponto
+      redrawCanvas();
+    }
+
+    drawCanvas.addEventListener('mousedown', (e) => {
+      if (!drawCanvas.classList.contains('active')) return;
+      isDrawing = true;
+      currentStroke = { tool: isEraser ? 'eraser' : 'pen', points: [{ x: e.pageX, y: e.pageY }] };
+      strokes.push(currentStroke);
+      redrawCanvas();
+    });
+
+    drawCanvas.addEventListener('mousemove', draw);
+    drawCanvas.addEventListener('mouseup', () => { isDrawing = false; currentStroke = null; });
+    drawCanvas.addEventListener('mouseout', () => { isDrawing = false; currentStroke = null; });
+
+    // ==========================================
+    // EFEITO MOUSE GLOW (NEURAL) COLADO + RASTRO (TRAIL)
+    // ==========================================
+    // Vamos criar o glow principal que segue exatamente o mouse
+    const mainGlow = document.createElement('div');
+    mainGlow.className = 'mouse-trail';
+    mainGlow.style.transition = 'opacity 0.3s ease'; // Mais rápido pro principal
+    mainGlow.style.opacity = '0';
+    document.body.appendChild(mainGlow);
+
+    let isTracking = false;
+    let lastTime = 0;
+
+    document.addEventListener('mousemove', (e) => {
+      const mouseX = e.clientX;
+      const mouseY = e.clientY;
+
+      if (!isTracking) {
+        mainGlow.style.opacity = '1';
+        isTracking = true;
+      }
+
+      // O glow principal fica sempre na mesma posição do cursor
+      requestAnimationFrame(() => {
+        mainGlow.style.transform = `translate(calc(${mouseX}px - 50%), calc(${mouseY}px - 50%)) scale(1.5)`;
+      });
+
+      // Lógica de Trail (Rastro que vai sumindo)
+      const now = Date.now();
+      // Dropa um rastro a cada 30ms pra uma trilha mais densa
+      if (now - lastTime > 30) {
+        const trail = document.createElement('div');
+        trail.className = 'mouse-trail';
+        // Começa em posição exata com opacidade alta e escala real
+        trail.style.transform = `translate(calc(${mouseX}px - 50%), calc(${mouseY}px - 50%)) scale(1)`;
+        trail.style.opacity = '1';
+        document.body.appendChild(trail);
+
+        // No próximo frame, inicia o fadeout gradativo pra zero
+        requestAnimationFrame(() => {
+          trail.style.opacity = '0';
+          // O rastro encolhe mais devagar
+          trail.style.transform = `translate(calc(${mouseX}px - 50%), calc(${mouseY}px - 50%)) scale(0.3)`;
+        });
+
+        // Limpa a div do rastro depois que a transição acabar (1.5s da transition no CSS)
+        setTimeout(() => {
+          trail.remove();
+        }, 1500);
+
+        lastTime = now;
+      }
+    });
+
+    document.addEventListener('mouseleave', () => {
+      mainGlow.style.opacity = '0';
+      isTracking = false;
+    });
+
+  </script>
+
+</body>
+
+</html>

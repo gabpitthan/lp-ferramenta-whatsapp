@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Konnex - Central de Geração de Conteúdo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Syne:wght@700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .hub-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: var(--clr-navy);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hub-title {
+            font-family: var(--font-heading);
+            font-size: 3rem;
+            color: white;
+            margin-bottom: 1rem;
+            z-index: 10;
+        }
+
+        .hub-subtitle {
+            font-family: var(--font-body);
+            font-size: 1.25rem;
+            color: var(--clr-gray-300);
+            margin-bottom: 4rem;
+            z-index: 10;
+        }
+
+        .hub-grid {
+            display: flex;
+            gap: 2rem;
+            z-index: 10;
+        }
+
+        .hub-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 3rem;
+            border-radius: 20px;
+            width: 320px;
+            text-align: center;
+            text-decoration: none;
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .hub-card:hover {
+            background: rgba(10, 135, 84, 0.1);
+            border-color: var(--clr-emerald);
+            transform: translateY(-5px);
+        }
+
+        .hub-card-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .hub-card-title {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .hub-card-desc {
+            font-family: var(--font-body);
+            font-size: 1rem;
+            color: var(--clr-gray-400);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="hub-container">
+        <div class="grid-bg"></div>
+        <div class="orb orb-emerald"></div>
+        <div class="orb orb-blue"></div>
+
+        <h1 class="hub-title">Central de Automação Visual</h1>
+        <p class="hub-subtitle">Gere todo o conteúdo estratégico para o Instagram da Konnex.</p>
+
+        <div class="hub-grid">
+            <a href="posts.html" class="hub-card">
+                <div class="hub-card-icon">🖼️</div>
+                <h2 class="hub-card-title">100 Posts Estáticos</h2>
+                <p class="hub-card-desc">Citações, Dados, Funcionalidades e Checklist.</p>
+            </a>
+
+            <a href="carrosseis.html" class="hub-card">
+                <div class="hub-card-icon">📚</div>
+                <h2 class="hub-card-title">Carrosséis Konnex</h2>
+                <p class="hub-card-desc">Sequências persuasivas focadas em dores e soluções operacionais.</p>
+            </a>
+        </div>
+    </div>
+</body>
+
+</html>
