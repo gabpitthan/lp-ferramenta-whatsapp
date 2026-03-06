@@ -2,18 +2,48 @@
   "tools": [
     {
       "id": "t1",
-      "name": "Gerador de Carrossel",
-      "description": "Crie carrosseis visuais para Instagram e LinkedIn com IA. Gera slides prontos para publicar.",
-      "icon": "ph-fill ph-images",
-      "color": "purple",
-      "path": "../carrossel/",
-      "status": "em-breve",
+      "name": "Central de Conteudo",
+      "description": "Hub central de geracao de conteudo para Instagram. Acesse carrosseis, posts e todas as ferramentas de conteudo da Konnex.",
+      "icon": "ph-fill ph-layout",
+      "color": "green",
+      "path": "../posts_instagram/",
+      "status": "ativo",
       "category": "conteudo"
     },
     {
       "id": "t2",
+      "name": "Carrosseis Instagram",
+      "description": "Visualize e gerencie os carrosseis gerados para o Instagram. +420 imagens produzidas com temas como CRM, atendimento e automacao.",
+      "icon": "ph-fill ph-images",
+      "color": "purple",
+      "path": "../posts_instagram/carrosseis.html",
+      "status": "ativo",
+      "category": "conteudo"
+    },
+    {
+      "id": "t3",
+      "name": "Posts Instagram",
+      "description": "Gerencie e visualize os posts criados para o Instagram com copy otimizada e identidade visual da Konnex.",
+      "icon": "ph-fill ph-instagram-logo",
+      "color": "orange",
+      "path": "../posts_instagram/posts.html",
+      "status": "ativo",
+      "category": "conteudo"
+    },
+    {
+      "id": "t4",
+      "name": "Apresentacao Konnex",
+      "description": "Apresentacao institucional completa da plataforma Konnex para prospects e parceiros.",
+      "icon": "ph-fill ph-presentation-chart",
+      "color": "blue",
+      "path": "../apresentacao/apresentacao.html",
+      "status": "ativo",
+      "category": "vendas"
+    },
+    {
+      "id": "t5",
       "name": "Documentacao Konnex",
-      "description": "Portal de documentacao tecnica da plataforma com sidebar navegavel e blocos de codigo.",
+      "description": "Portal de documentacao tecnica com sidebar navegavel, blocos de codigo e exemplos de integracao via API.",
       "icon": "ph-fill ph-books",
       "color": "blue",
       "path": "../docs/",
@@ -79,6 +109,28 @@
     },
     {
       "id": "6",
+      "name": "Central de Conteudo Instagram",
+      "description": "Hub de ferramentas para geracao de conteudo: carrosseis, posts e gerador automatizado com mais de 420 imagens produzidas.",
+      "status": "concluido",
+      "category": "conteudo",
+      "path": "../posts_instagram/",
+      "repo": "https://github.com/gabpitthan/lp-ferramenta-whatsapp",
+      "created_at": "2026-03-06",
+      "updated_at": "2026-03-06"
+    },
+    {
+      "id": "7",
+      "name": "Apresentacao Konnex",
+      "description": "Apresentacao institucional interativa da plataforma para prospects, parceiros e white-label.",
+      "status": "concluido",
+      "category": "vendas",
+      "path": "../apresentacao/apresentacao.html",
+      "repo": "https://github.com/gabpitthan/lp-ferramenta-whatsapp",
+      "created_at": "2026-03-06",
+      "updated_at": "2026-03-06"
+    },
+    {
+      "id": "8",
       "name": "Painel de Controle",
       "description": "Dashboard SaaS central para acesso a ferramentas, projetos e paginas. Auto-deploy via Netlify.",
       "status": "em-andamento",
