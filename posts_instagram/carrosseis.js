@@ -220,35 +220,21 @@ function renderSlide() {
 
     // Different layout for slide types
     if (slide.type === 'TWEET') {
-        const metricsHtml = slide.metrics ? `
-            <div class="tweet-footer">
-                <div class="tweet-metric"><span class="icon">💬</span> ${slide.metrics.quotes || '0'}</div>
-                <div class="tweet-metric"><span class="icon">🔁</span> ${slide.metrics.retweets || '0'}</div>
-                <div class="tweet-metric"><span class="icon">❤️</span> ${slide.metrics.likes || '0'}</div>
-                <div class="tweet-metric"><span class="icon">🔖</span></div>
-            </div>
-        ` : '';
-
-        const timeHtml = slide.time ? `<div class="tweet-time">${slide.time}</div>` : '';
-
         html = `
             ${currentSlideIndex < carousel.slides.length - 1 ? instructionsHintHtml : ''}
             ${dotsHtml}
             <div class="post-content-layer tpl-tweet">
                 <div class="tweet-card">
                     <div class="tweet-header">
-                        <img src="${slide.avatar || 'https://picsum.photos/seed/placeholder/100/100'}" class="tweet-avatar" alt="Avatar">
+                        <img src="${slide.avatar || 'avatar-gabriel.svg'}" class="tweet-avatar" alt="Avatar">
                         <div class="tweet-author-info">
-                            <div class="tweet-author">${slide.author || 'Konnex'} <span class="verified-badge">✓</span></div>
-                            <div class="tweet-handle">${slide.handle || '@konnex_oficial'}</div>
+                            <div class="tweet-author">${slide.author || 'Gabriel Varella Pitthan'} <span class="verified-badge">✓</span></div>
+                            <div class="tweet-handle">${slide.handle || '@ogabrielvarella'}</div>
                         </div>
                     </div>
                     <div class="tweet-body">
                         ${slide.text.replace(/\n/g, '<br>')}
                     </div>
-                    ${timeHtml}
-                    ${slide.metrics ? '<div class="tweet-divider"></div>' : ''}
-                    ${metricsHtml}
                 </div>
             </div>
         `;
