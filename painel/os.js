@@ -61,7 +61,7 @@ const S = {
   tasks: [], deliverables: [], content: [], kbDocs: [],
   competitors: [], salesCalls: [], automations: [],
   chatHistory: {},
-  settings: { apiKey: '', model: 'claude-sonnet-4-6', companyName: 'Konnex', companyDesc: '', userName: 'Usuário' },
+  settings: { companyName: 'Konnex', companyDesc: '', userName: 'Usuário' },
   kbCategory: 'all', contentFilter: 'all', sidebarCollapsed: false,
 };
 
@@ -158,8 +158,8 @@ function render() {
 
   // api dot
   const dot = $('apiDot'), lbl = $('apiLabel');
-  if (dot) { dot.className = 'status-dot' + (S.settings.apiKey ? ' online' : ''); }
-  if (lbl) { lbl.textContent = S.settings.apiKey ? 'API conectada' : 'API desconectada'; }
+  if (dot) { dot.className = 'status-dot' + (true ? ' online' : ''); }
+  if (lbl) { lbl.textContent = 'Claude Code'; }
 
   const views = {
     overview, agents, kanban, content, deliverables, tools,
@@ -185,17 +185,7 @@ function overview() {
   const delivs = S.deliverables.length;
   const contentToday = S.content.filter(c => c.date && c.date.includes(new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'short'}))).length;
 
-  const setupBanner = !S.settings.apiKey ? `
-    <div class="setup-banner">
-      <div class="setup-banner-icon">🔑</div>
-      <div class="setup-banner-text">
-        <h3>Configure sua API Key para ativar os agentes</h3>
-        <p>Todos os 7 agentes, Content Engine, Sales Intelligence e Competitor Intel precisam da sua Anthropic API Key. É rápido — leva menos de 1 minuto.</p>
-      </div>
-      <div class="setup-banner-actions">
-        <button class="btn btn-primary" onclick="OS.navigate('settings')"><i class="ph ph-key"></i> Configurar agora</button>
-      </div>
-    </div>` : '';
+  const setupBanner = '';
 
   const quickActions = `
     <div class="quick-actions">
@@ -211,9 +201,7 @@ function overview() {
       <div class="agent-status-avatar" style="background:${ag.bg};color:${ag.color}">${ag.icon}</div>
       <div class="agent-status-info">
         <div class="agent-status-name">${ag.name}</div>
-        <div class="agent-status-state" style="color:${S.settings.apiKey?'var(--em-l)':'var(--g600)'}">
-          ${S.settings.apiKey ? '● Online' : '○ Aguardando API'}
-        </div>
+        <div class="agent-status-state" style="color:var(--em-l)">● Ativo</div>
       </div>
     </div>`).join('');
 
@@ -406,7 +394,8 @@ function scrollBottom() {
   if (c) setTimeout(() => c.scrollTop = c.scrollHeight, 50);
 }
 
-async function sendMessage(agId) {
+// Envia mensagem para o agente — a resposta e executada pelo Claude Code
+function sendMessage(agId) {
   const input = $('chatInput');
   if (!input) return;
   const text = input.value.trim();
@@ -419,121 +408,21 @@ async function sendMessage(agId) {
 
   const msgs = $('chatMessages');
   msgs?.querySelector('.chat-empty')?.remove();
-  if (msgs) msgs.insertAdjacentHTML('beforeend', renderMsg({role:'user',content:text}, ag));
-
-  const btn = $('chatSendBtn');
-  if (btn) btn.disabled = true;
-
-  let reply;
-  if (S.settings.apiKey) {
-    const sid = 'sm' + uid();
-    const userInitial = (S.settings.userName||'U')[0].toUpperCase();
-    msgs?.insertAdjacentHTML('beforeend', `
-      <div class="msg assistant" id="${sid}">
+  if (msgs) {
+    msgs.insertAdjacentHTML('beforeend', renderMsg({role:'user',content:text}, ag));
+    msgs.insertAdjacentHTML('beforeend', `
+      <div class="msg assistant">
         <div class="msg-avatar" style="background:${ag.bg};color:${ag.color}">${ag.icon}</div>
-        <div class="msg-content"><div class="msg-bubble" id="${sid}b"><span class="stream-cursor"></span></div></div>
+        <div class="msg-content">
+          <div class="msg-bubble" style="color:var(--g500);font-style:italic;font-size:.825rem">
+            Mensagem registrada. Execute o agente pelo Claude Code para obter resposta.<br>
+            <code style="font-size:.75rem;color:var(--em-l)">Agente: ${ag.name} | Prompt: ${esc(text.slice(0,80))}${text.length>80?'...':''}</code>
+          </div>
+        </div>
       </div>`);
     scrollBottom();
-    reply = await callClaudeStream(agId, null, txt => {
-      const b = $(sid+'b');
-      if (b) { b.innerHTML = fmtMd(txt) + '<span class="stream-cursor"></span>'; scrollBottom(); }
-    });
-    $(sid)?.remove();
-  } else {
-    msgs?.insertAdjacentHTML('beforeend', `
-      <div class="msg assistant" id="typingMsg">
-        <div class="msg-avatar" style="background:${ag.bg};color:${ag.color}">${ag.icon}</div>
-        <div class="msg-content"><div class="typing-indicator">
-          <div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>
-        </div></div>
-      </div>`);
-    scrollBottom();
-    await new Promise(r => setTimeout(r, 800));
-    reply = `⚠️ **API Key não configurada**\n\nVá em **Configurações** e insira sua API Key da Anthropic para ativar todos os agentes com IA.\n\nVocê perguntou: "${text}"`;
-    $('typingMsg')?.remove();
   }
-
-  S.chatHistory[agId].push({ role:'assistant', content:reply });
   save();
-  msgs?.insertAdjacentHTML('beforeend', renderMsg({role:'assistant',content:reply}, ag));
-  scrollBottom();
-  if (btn) btn.disabled = false;
-}
-
-async function callClaudeStream(agId, overrideMessages, onChunk) {
-  const ag = AGENTS[agId];
-  const messages = overrideMessages || (S.chatHistory[agId]||[]).map(m=>({role:m.role,content:m.content}));
-  const systemPrompt = ag.prompt + getKbContext() +
-    (S.settings.companyDesc ? `\n\nContexto da empresa: ${S.settings.companyDesc}` : '');
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method:'POST',
-      headers:{
-        'x-api-key': S.settings.apiKey,
-        'anthropic-version':'2023-06-01',
-        'content-type':'application/json',
-        'anthropic-dangerous-direct-browser-calls':'true'
-      },
-      body: JSON.stringify({
-        model: S.settings.model||'claude-sonnet-4-6',
-        max_tokens: 2048,
-        stream: true,
-        system: systemPrompt,
-        messages
-      })
-    });
-    const reader = res.body.getReader();
-    const dec = new TextDecoder();
-    let full = '';
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      for (const line of dec.decode(value).split('\n')) {
-        if (!line.startsWith('data: ')) continue;
-        const d = line.slice(6);
-        if (d === '[DONE]') continue;
-        try {
-          const j = JSON.parse(d);
-          if (j.type==='content_block_delta' && j.delta?.type==='text_delta') {
-            full += j.delta.text;
-            onChunk(full);
-          }
-        } catch(e) {}
-      }
-    }
-    return full || 'Sem resposta.';
-  } catch(e) {
-    return `Erro ao conectar: ${e.message}`;
-  }
-}
-
-async function callClaude(agId, overrideMessages) {
-  const ag = AGENTS[agId];
-  const messages = overrideMessages || (S.chatHistory[agId] || []).map(m => ({ role:m.role, content:m.content }));
-  const systemPrompt = ag.prompt + getKbContext() +
-    (S.settings.companyDesc ? `\n\nContexto da empresa: ${S.settings.companyDesc}` : '');
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'x-api-key': S.settings.apiKey,
-        'anthropic-version': '2023-06-01',
-        'content-type': 'application/json',
-        'anthropic-dangerous-direct-browser-calls': 'true'
-      },
-      body: JSON.stringify({
-        model: S.settings.model || 'claude-sonnet-4-6',
-        max_tokens: 2000,
-        system: systemPrompt,
-        messages
-      })
-    });
-    const data = await res.json();
-    if (data.error) return `Erro da API: ${data.error.message}`;
-    return data.content?.[0]?.text || 'Sem resposta.';
-  } catch(e) {
-    return `Erro ao conectar: ${e.message}`;
-  }
 }
 
 function useQuickPrompt(agId, btn) {
@@ -619,30 +508,17 @@ function initKanban() {
       if (!task || task.status === newStatus) return;
       task.status = newStatus;
       save(); render(); toast('Tarefa movida');
-      // auto-execute when moved to inprogress
-      if (newStatus === 'inprogress' && task.aiPrompt && task.agent && S.settings.apiKey) {
-        await autoExecuteTask(task);
-      }
     });
   });
 }
 
-async function autoExecuteTask(task) {
+// Marca tarefa como pendente de execucao pelo Claude Code
+function autoExecuteTask(task) {
   const ag = AGENTS[task.agent];
   if (!ag) return;
-  toast(`${ag.name} executando tarefa...`);
-  const msgs = [{ role:'user', content: task.aiPrompt }];
-  const reply = await callClaude(task.agent, msgs);
-  const delivId = uid();
-  S.deliverables.unshift({
-    id: delivId, title: `[Auto] ${task.title}`,
-    content: reply, agent: task.agent,
-    date: now(), seen: false, linkedTask: task.id, tags: task.tags || []
-  });
-  task.linkedDeliverable = delivId;
-  task.status = 'review';
+  task.pendingExecution = true;
   save();
-  toast(`Deliverable gerado por ${ag.name}!`);
+  toast(`Tarefa marcada para execução pelo Claude Code`);
   if (S.route === 'kanban') render();
 }
 
@@ -706,75 +582,28 @@ function openContentGen() {
     <div style="margin-top:1.25rem;display:flex;gap:.5rem;justify-content:flex-end">
       <button class="btn btn-ghost" onclick="OS.closeModal('contentGenModal')">Cancelar</button>
       <button class="btn btn-primary" id="cgBtn" onclick="OS.runContentGen()">
-        <i class="ph ph-sparkle"></i> Gerar tudo com IA
+        <i class="ph ph-sparkle"></i> Registrar pedido
       </button>
     </div>`;
   openModal('contentGenModal');
 }
 
-async function runContentGen() {
-  if (!S.settings.apiKey) { toast('Configure a API Key em Configurações','error'); return; }
-  const btn = $('cgBtn');
-  if (btn) { btn.disabled = true; btn.innerHTML = '<i class="ph ph-circle-notch ph-spin"></i> Gerando...'; }
-
+// Registra pedido de conteudo — Claude Code executa e adiciona os itens ao content
+function runContentGen() {
   const topic = $('cgTopic')?.value.trim() || 'automação de WhatsApp para empreendedores brasileiros';
   const tone  = $('cgTone')?.value || 'educativo';
-
-  const prompt = `Você é o Content Director da Konnex. Gere o seguinte conteúdo sobre "${topic}" com tom ${tone}:
-
-1. SCRIPTS INSTAGRAM (3 scripts completos para Reels/Carrossel)
-2. SCRIPT YOUTUBE (1 script completo com abertura, desenvolvimento e CTA)
-3. IDEIAS DE CONTEÚDO (5 ideias únicas e específicas)
-4. HOOKS VIRAIS (3 hooks para abrir vídeos/posts)
-
-Separe claramente cada seção com "===SECAO===" e o tipo: INSTAGRAM_1, INSTAGRAM_2, INSTAGRAM_3, YOUTUBE, IDEIA_1, IDEIA_2, IDEIA_3, IDEIA_4, IDEIA_5, HOOK_1, HOOK_2, HOOK_3.
-Escreva em português brasileiro. Seja específico, criativo e focado em conversão.`;
-
-  const reply = await callClaude('content', [{ role:'user', content:prompt }]);
-
-  // parse and save each piece
-  const sections = reply.split(/===([A-Z_0-9]+)===/);
-  const typeMap = {
-    INSTAGRAM_1:'post', INSTAGRAM_2:'post', INSTAGRAM_3:'post',
-    YOUTUBE:'video',
-    IDEIA_1:'ideia', IDEIA_2:'ideia', IDEIA_3:'ideia', IDEIA_4:'ideia', IDEIA_5:'ideia',
-    HOOK_1:'hook', HOOK_2:'hook', HOOK_3:'hook'
-  };
-  const labelMap = {
-    INSTAGRAM_1:'Script Instagram #1', INSTAGRAM_2:'Script Instagram #2', INSTAGRAM_3:'Script Instagram #3',
-    YOUTUBE:'Script YouTube',
-    IDEIA_1:'Ideia #1', IDEIA_2:'Ideia #2', IDEIA_3:'Ideia #3', IDEIA_4:'Ideia #4', IDEIA_5:'Ideia #5',
-    HOOK_1:'Hook Viral #1', HOOK_2:'Hook Viral #2', HOOK_3:'Hook Viral #3'
-  };
-
-  let count = 0;
-  for (let i = 1; i < sections.length; i += 2) {
-    const key  = sections[i]?.trim();
-    const body = sections[i+1]?.trim();
-    if (!key || !body) continue;
-    S.content.unshift({
-      id: uid(),
-      type: typeMap[key] || 'post',
-      title: `${labelMap[key]||key} — ${topic.slice(0,40)}`,
-      body,
-      agent: 'content',
-      date: now(),
-      topic, tone
-    });
-    count++;
-  }
-
-  if (!count) {
-    // fallback: save whole reply
-    S.content.unshift({ id:uid(), type:'post', title:`Conteúdo Diário — ${topic.slice(0,40)}`, body:reply, agent:'content', date:now() });
-    count = 1;
-  }
-
+  // Salva um item placeholder que Claude Code vai substituir com o conteudo real
+  S.content.unshift({
+    id: uid(), type:'ideia',
+    title: `[Pendente] Conteudo Diario — ${topic.slice(0,40)}`,
+    body: `Aguardando execucao pelo Claude Code.\nTema: ${topic}\nTom: ${tone}\n\nExecute no terminal:\n> Gere conteudo diario para o painel Konnex sobre "${topic}" tom ${tone}`,
+    agent:'content', date:now(), topic, tone, pending:true
+  });
   save();
   closeModal('contentGenModal');
   S.contentFilter = 'all';
   render();
-  toast(`${count} peças de conteúdo geradas!`);
+  toast('Pedido de conteudo registrado. Execute pelo Claude Code.');
 }
 
 function viewContentItem(id) {
@@ -963,40 +792,7 @@ async function saveSalesCall() {
   const call = { id:uid(), title, transcript, outcome, date:now(), summary:'Analisando...' };
   S.salesCalls.unshift(call);
   save(); closeModal('salesModal'); render();
-  toast('Call salva — analisando com IA...');
-
-  if (S.settings.apiKey) {
-    const prompt = `Analise esta call de vendas e produza um relatório estruturado com:
-
-**RESUMO EXECUTIVO**
-(2-3 frases)
-
-**OBJECCOES IDENTIFICADAS**
-(liste cada objecão levantada pelo prospect)
-
-**FRASES VENCEDORAS**
-(momentos em que o vendedor foi eficaz)
-
-**ERROS DE FECHAMENTO**
-(oportunidades perdidas ou erros cometidos)
-
-**PRÓXIMOS PASSOS RECOMENDADOS**
-(acoes concretas)
-
-**SCORE DA CALL** (0-10)
-
----
-Título: ${title}
-Resultado: ${outcome}
-
-TRANSCRIÇÃO:
-${transcript}`;
-
-    const analysis = await callClaude('sales', [{ role:'user', content:prompt }]);
-    const c = S.salesCalls.find(x=>x.id===call.id);
-    if (c) { c.summary = analysis.slice(0,200); c.analysis = analysis; save(); }
-    toast('Análise concluída!');
-  }
+  toast('Call salva. Peça analise ao Claude Code quando quiser.');
 }
 
 function viewSalesCall(id) {
@@ -1016,15 +812,14 @@ function viewSalesCall(id) {
   openModal('delivModal');
 }
 
-async function generateSalesReport() {
-  if (!S.settings.apiKey) { toast('Configure a API Key em Configurações','error'); return; }
+function generateSalesReport() {
   if (!S.salesCalls.length) { toast('Nenhuma call para analisar','error'); return; }
-  toast('Gerando relatório diário...');
-  const summary = S.salesCalls.slice(0,10).map(c => `- ${c.title} (${c.outcome}): ${c.summary||c.transcript?.slice(0,100)}`).join('\n');
-  const prompt = `Com base nestas calls de vendas recentes, gere um Relatório Diário de Vendas completo com: performance geral, padrões de objeções, taxa de conversão, top 3 melhorias imediatas, e previsão para os próximos 7 dias.\n\nCALLS:\n${summary}`;
-  const report = await callClaude('sales', [{ role:'user', content:prompt }]);
-  S.deliverables.unshift({ id:uid(), title:`Relatório Diário de Vendas — ${now()}`, content:report, agent:'sales', date:now(), seen:false });
-  save(); navigate('deliverables'); toast('Relatório gerado!');
+  S.deliverables.unshift({
+    id:uid(), title:`[Pendente] Relatorio Diario de Vendas — ${now()}`,
+    content:`Aguardando analise pelo Claude Code.\n\nCalls registradas: ${S.salesCalls.length}\n\nExecute pelo Claude Code para gerar o relatorio completo.`,
+    agent:'sales', date:now(), seen:false, pending:true
+  });
+  save(); navigate('deliverables'); toast('Pedido de relatorio registrado. Execute pelo Claude Code.');
 }
 
 function deleteSalesCall(id) {
@@ -1042,7 +837,7 @@ function competitor() {
           <div class="intel-card-sub">${esc(c.category||'')}</div>
         </div>
         <div style="display:flex;gap:.35rem">
-          ${S.settings.apiKey ? `<button class="btn btn-ghost btn-sm btn-icon" onclick="OS.analyzeCompetitor('${c.id}')" title="Analisar com IA"><i class="ph ph-robot"></i></button>` : ''}
+            <button class="btn btn-ghost btn-sm btn-icon" onclick="OS.analyzeCompetitor('${c.id}')" title="Solicitar analise ao Claude Code"><i class="ph ph-robot"></i></button>
           <button class="btn btn-ghost btn-sm btn-icon" onclick="OS.deleteCompetitor('${c.id}')"><i class="ph ph-trash"></i></button>
         </div>
       </div>
@@ -1054,7 +849,7 @@ function competitor() {
     <div class="section-header">
       <div><h2>Competitor Intel</h2><p>Monitore e analise seus concorrentes com IA</p></div>
       <div style="display:flex;gap:.5rem">
-        ${S.settings.apiKey && S.competitors.length ? `<button class="btn btn-ghost" onclick="OS.analyzeAllCompetitors()"><i class="ph ph-robot"></i> Análise Geral</button>` : ''}
+        ${S.competitors.length ? `<button class="btn btn-ghost" onclick="OS.analyzeAllCompetitors()"><i class="ph ph-robot"></i> Análise Geral</button>` : ''}
         <button class="btn btn-primary" onclick="OS.openCompetitorModal()"><i class="ph ph-plus"></i> Adicionar</button>
       </div>
     </div>
@@ -1095,57 +890,29 @@ function saveCompetitor() {
     notes:    $('compNotes')?.value.trim(),
     tags:     $('compTags')?.value.split(',').map(t=>t.trim()).filter(Boolean),
   });
-  save(); closeModal('competitorModal');
-  if (S.settings.apiKey && S.competitors[0].notes) {
-    analyzeCompetitor(S.competitors[0].id);
-  }
-  render(); toast('Concorrente adicionado');
+  save(); closeModal('competitorModal'); render(); toast('Concorrente adicionado');
 }
 
-async function analyzeCompetitor(id) {
+// Registra pedido de analise — Claude Code executa e escreve o resultado
+function analyzeCompetitor(id) {
   const c = S.competitors.find(x=>x.id===id);
   if (!c) return;
-  toast(`Analisando ${c.name} com IA...`);
-  const prompt = `Analise este concorrente e forneça insights estratégicos:
-
-**CONCORRENTE:** ${c.name} (${c.category||'sem categoria'})
-
-**CONTEÚDO/MATERIAL:**
-${c.notes||'Sem material fornecido'}
-
-Gere:
-1. **Pontos fortes** identificados
-2. **Pontos fracos** e vulnerabilidades
-3. **Hooks e padrões virais** que eles usam
-4. **Como se diferenciar** do Konnex
-5. **Oportunidades** que eles não estão explorando
-6. **Score de ameaça** (1-10) com justificativa`;
-
-  const analysis = await callClaude('ceo', [{ role:'user', content:prompt }]);
-  c.analysis = analysis;
-  c.notes = analysis;
-  save(); render(); toast(`Análise de ${c.name} concluída!`);
+  S.deliverables.unshift({
+    id:uid(), title:`[Pendente] Analise — ${c.name}`,
+    content:`Aguardando analise pelo Claude Code.\nConcorrente: ${c.name}\n\nExecute pelo Claude Code para gerar analise completa.`,
+    agent:'ceo', date:now(), seen:false, pending:true
+  });
+  save(); navigate('deliverables'); toast(`Pedido de analise de ${c.name} registrado`);
 }
 
-async function analyzeAllCompetitors() {
+function analyzeAllCompetitors() {
   if (!S.competitors.length) return;
-  toast('Gerando análise geral de mercado...');
-  const list = S.competitors.map(c=>`- ${c.name} (${c.category||''})`).join('\n');
-  const prompt = `Com base nesta lista de concorrentes do Konnex (WhatsApp automation SaaS), gere uma análise de mercado completa:
-
-CONCORRENTES:
-${list}
-
-Forneça:
-1. **Mapa competitivo** do mercado
-2. **Posicionamento ideal** do Konnex
-3. **Principais ameaças** a mitigar
-4. **Blue ocean** — oportunidades não exploradas
-5. **Estratégia de diferenciação** recomendada`;
-
-  const analysis = await callClaude('ceo', [{ role:'user', content:prompt }]);
-  S.deliverables.unshift({ id:uid(), title:`Análise de Mercado — ${now()}`, content:analysis, agent:'ceo', date:now(), seen:false });
-  save(); navigate('deliverables'); toast('Análise de mercado gerada!');
+  S.deliverables.unshift({
+    id:uid(), title:`[Pendente] Analise Geral de Mercado — ${now()}`,
+    content:`Aguardando analise pelo Claude Code.\nConcorrentes: ${S.competitors.map(c=>c.name).join(', ')}\n\nExecute pelo Claude Code para gerar o mapa competitivo.`,
+    agent:'ceo', date:now(), seen:false, pending:true
+  });
+  save(); navigate('deliverables'); toast('Pedido de analise de mercado registrado');
 }
 
 function deleteCompetitor(id) {
@@ -1269,59 +1036,49 @@ function toggleAutomation(id) {
 
 // ─── SETTINGS ─────────────────────────────────────────────────────────────────
 function settings() {
-  const models = [
-    { v:'claude-sonnet-4-6',          l:'Claude Sonnet 4.6 (recomendado)' },
-    { v:'claude-haiku-4-5-20251001',  l:'Claude Haiku 4.5 (mais rápido)' },
-    { v:'claude-opus-4-6',            l:'Claude Opus 4.6 (mais poderoso)' },
-  ];
   return `
-    <div class="section-header"><div><h2>Configurações</h2></div></div>
+    <div class="section-header"><div><h2>Configurações</h2><p>Preferências do sistema Konnex OS</p></div></div>
     <div class="settings-layout">
       <div class="settings-nav">
-        <div class="settings-nav-item active"><i class="ph ph-key"></i>API</div>
+        <div class="settings-nav-item active"><i class="ph ph-user"></i>Perfil</div>
         <div class="settings-nav-item"><i class="ph ph-buildings"></i>Empresa</div>
       </div>
       <div class="settings-section">
         <div class="settings-card">
-          <h3>Anthropic API</h3>
+          <h3>Seu Perfil</h3>
           <div class="form-group">
-            <label class="form-label">API Key</label>
-            <input class="form-input" id="settApiKey" type="password" value="${esc(S.settings.apiKey||'')}" placeholder="sk-ant-...">
-            <span class="form-hint">Necessária para ativar todos os agentes com IA real. Os 7 agentes, Content Engine, Sales Analysis e Competitor Intel dependem desta key.</span>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Modelo</label>
-            <select class="form-select" id="settModel">
-              ${models.map(m=>`<option value="${m.v}" ${S.settings.model===m.v?'selected':''}>${m.l}</option>`).join('')}
-            </select>
+            <label class="form-label">Seu nome</label>
+            <input class="form-input" id="settUserName" value="${esc(S.settings.userName||'')}" placeholder="Seu nome">
+            <span class="form-hint">Aparece como sua inicial nos logs de conversa com os agentes.</span>
           </div>
           <button class="btn btn-primary" onclick="OS.saveSettings()"><i class="ph ph-floppy-disk"></i> Salvar</button>
         </div>
         <div class="settings-card">
-          <h3>Perfil & Empresa</h3>
-          <div class="form-group">
-            <label class="form-label">Seu nome</label>
-            <input class="form-input" id="settUserName" value="${esc(S.settings.userName||'')}" placeholder="Seu nome">
-            <span class="form-hint">Aparece nos chats com os agentes.</span>
-          </div>
+          <h3>Empresa</h3>
           <div class="form-group">
             <label class="form-label">Nome da empresa</label>
             <input class="form-input" id="settCompany" value="${esc(S.settings.companyName||'')}" placeholder="Konnex">
           </div>
           <div class="form-group">
-            <label class="form-label">Contexto para os agentes</label>
-            <textarea class="form-textarea" id="settDesc" placeholder="Descreva produto, ICP, diferenciais, tom de voz...">${esc(S.settings.companyDesc||'')}</textarea>
-            <span class="form-hint">Este contexto é injetado em todos os agentes, tornando as respostas mais específicas para o seu negócio.</span>
+            <label class="form-label">Contexto do negócio</label>
+            <textarea class="form-textarea" id="settDesc" rows="5" placeholder="Produto, ICP, diferenciais, tom de voz, mercado alvo...">${esc(S.settings.companyDesc||'')}</textarea>
+            <span class="form-hint">Usado pelo Claude Code ao executar tarefas dos agentes para manter contexto do seu negócio.</span>
           </div>
           <button class="btn btn-primary" onclick="OS.saveSettings()"><i class="ph ph-floppy-disk"></i> Salvar</button>
+        </div>
+        <div class="settings-card">
+          <h3>Como funciona o Konnex OS</h3>
+          <div style="display:flex;flex-direction:column;gap:.75rem;font-size:.875rem;color:var(--g400);line-height:1.6">
+            <div style="display:flex;gap:.75rem;align-items:flex-start"><i class="ph ph-number-circle-one" style="color:var(--em-l);font-size:1.25rem;flex-shrink:0"></i><span>Crie tarefas no Kanban e atribua a um agente com um prompt de instrucao</span></div>
+            <div style="display:flex;gap:.75rem;align-items:flex-start"><i class="ph ph-number-circle-two" style="color:var(--em-l);font-size:1.25rem;flex-shrink:0"></i><span>O Claude Code le a tarefa, executa o trabalho e publica o resultado no painel</span></div>
+            <div style="display:flex;gap:.75rem;align-items:flex-start"><i class="ph ph-number-circle-three" style="color:var(--em-l);font-size:1.25rem;flex-shrink:0"></i><span>Voce revisa e aprova no painel — o Claude Code entao executa a acao final</span></div>
+          </div>
         </div>
       </div>
     </div>`;
 }
 
 function saveSettings() {
-  S.settings.apiKey      = $('settApiKey')?.value.trim()    || S.settings.apiKey;
-  S.settings.model       = $('settModel')?.value            || S.settings.model;
   S.settings.userName    = $('settUserName')?.value.trim()  || S.settings.userName;
   S.settings.companyName = $('settCompany')?.value.trim()   || S.settings.companyName;
   S.settings.companyDesc = $('settDesc')?.value.trim()      || '';
@@ -1428,26 +1185,26 @@ function openTaskDetail(id) {
     <div style="display:flex;gap:.5rem;justify-content:space-between;margin-top:1.5rem">
       <button class="btn btn-danger btn-sm" onclick="OS.deleteTask('${t.id}')"><i class="ph ph-trash"></i> Excluir</button>
       <div style="display:flex;gap:.5rem">
-        ${t.aiPrompt && ag && S.settings.apiKey ? `<button class="btn btn-ghost btn-sm" onclick="OS.closeModal('taskModal');OS.forceExecuteTask('${t.id}')"><i class="ph ph-robot"></i> Executar agora</button>` : ''}
+        <button class="btn btn-ghost btn-sm" onclick="OS.closeModal('taskModal');OS.forceExecuteTask('${t.id}')"><i class="ph ph-robot"></i> Solicitar execucao</button>
         ${ag ? `<button class="btn btn-primary btn-sm" onclick="OS.closeModal('taskModal');OS.navigate('agents/${ag.id}')"><i class="ph ph-chat"></i> ${ag.name}</button>` : ''}
       </div>
     </div>`;
   openModal('taskModal');
 }
 
-async function updateTaskStatus(id, status) {
+function updateTaskStatus(id, status) {
   const t = S.tasks.find(x=>x.id===id);
   if (!t) return;
   t.status = status; save();
-  if (status === 'inprogress' && t.aiPrompt && t.agent && S.settings.apiKey) {
+  if (status === 'inprogress' && t.aiPrompt && t.agent) {
     closeModal('taskModal');
-    await autoExecuteTask(t);
+    autoExecuteTask(t);
   }
 }
 
-async function forceExecuteTask(id) {
+function forceExecuteTask(id) {
   const t = S.tasks.find(x=>x.id===id);
-  if (t) await autoExecuteTask(t);
+  if (t) { t.pendingExecution = true; save(); toast('Tarefa marcada para execucao pelo Claude Code'); render(); }
 }
 
 function deleteTask(id) {
