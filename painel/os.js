@@ -61,7 +61,7 @@ const S = {
   tasks: [], deliverables: [], content: [], kbDocs: [],
   competitors: [], salesCalls: [], automations: [],
   chatHistory: {},
-  settings: { apiKey: '', model: 'claude-sonnet-4-6', companyName: 'Konnex', companyDesc: '' },
+  settings: { apiKey: '', model: 'claude-sonnet-4-6', companyName: 'Konnex', companyDesc: '', userName: 'Usuário' },
   kbCategory: 'all', contentFilter: 'all', sidebarCollapsed: false,
 };
 
@@ -183,6 +183,28 @@ function overview() {
   const done   = S.tasks.filter(t=>t.status==='done').length;
   const inProg = S.tasks.filter(t=>t.status==='inprogress').length;
   const delivs = S.deliverables.length;
+  const contentToday = S.content.filter(c => c.date && c.date.includes(new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'short'}))).length;
+
+  const setupBanner = !S.settings.apiKey ? `
+    <div class="setup-banner">
+      <div class="setup-banner-icon">🔑</div>
+      <div class="setup-banner-text">
+        <h3>Configure sua API Key para ativar os agentes</h3>
+        <p>Todos os 7 agentes, Content Engine, Sales Intelligence e Competitor Intel precisam da sua Anthropic API Key. É rápido — leva menos de 1 minuto.</p>
+      </div>
+      <div class="setup-banner-actions">
+        <button class="btn btn-primary" onclick="OS.navigate('settings')"><i class="ph ph-key"></i> Configurar agora</button>
+      </div>
+    </div>` : '';
+
+  const quickActions = `
+    <div class="quick-actions">
+      <button class="quick-action-btn" onclick="OS.openTaskModal()"><i class="ph ph-plus"></i> Nova tarefa</button>
+      <button class="quick-action-btn" onclick="OS.navigate('agents/ceo')"><i class="ph ph-crown"></i> Falar com CEO</button>
+      <button class="quick-action-btn" onclick="OS.navigate('agents/content')"><i class="ph ph-film-slate"></i> Content Director</button>
+      <button class="quick-action-btn" onclick="OS.openContentGen()"><i class="ph ph-sparkle"></i> Gerar conteúdo</button>
+      <button class="quick-action-btn" onclick="OS.navigate('kanban')"><i class="ph ph-kanban"></i> Ver kanban</button>
+    </div>`;
 
   const agCards = Object.values(AGENTS).map(ag => `
     <div class="agent-status-item" style="cursor:pointer" onclick="OS.navigate('agents/${ag.id}')">
@@ -190,22 +212,31 @@ function overview() {
       <div class="agent-status-info">
         <div class="agent-status-name">${ag.name}</div>
         <div class="agent-status-state" style="color:${S.settings.apiKey?'var(--em-l)':'var(--g600)'}">
-          ${S.settings.apiKey ? 'Online' : 'Aguardando API'}
+          ${S.settings.apiKey ? '● Online' : '○ Aguardando API'}
         </div>
       </div>
     </div>`).join('');
 
-  const recent = [...S.tasks].reverse().slice(0,6).map(t =>
-    `<div class="activity-item">
+  const recentDelivs = [...S.deliverables].slice(0,4).map(d => {
+    const ag = AGENTS[d.agent];
+    return `<div class="activity-item" style="cursor:pointer" onclick="OS.viewDeliverable('${d.id}')">
+      <span style="font-size:1.1rem">${ag?.icon||'📄'}</span>
+      <div class="activity-text">${esc(d.title)}</div>
+      <div class="activity-time">${d.date||''}</div>
+    </div>`;
+  }).join('') || `<div class="activity-item"><i class="ph ph-info activity-icon"></i><div class="activity-text">Nenhum deliverable ainda.</div></div>`;
+
+  const recentTasks = [...S.tasks].filter(t=>t.status!=='done').reverse().slice(0,5).map(t => `
+    <div class="activity-item" style="cursor:pointer" onclick="OS.openTaskDetail('${t.id}')">
       <i class="ph ph-check-square activity-icon"></i>
       <div class="activity-text">${esc(t.title)}</div>
-      <div class="activity-time">${t.status}</div>
+      <div class="activity-time" style="color:${t.status==='inprogress'?'var(--em-l)':'var(--g500)'}">${t.status==='inprogress'?'Em andamento':t.status==='review'?'Review':t.status}</div>
     </div>`
-  ).join('') || `<div class="activity-item"><i class="ph ph-info activity-icon"></i><div class="activity-text">Nenhuma atividade ainda.</div></div>`;
-
-  const contentToday = S.content.filter(c => c.date && c.date.includes(new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'short'}))).length;
+  ).join('') || `<div class="activity-item"><i class="ph ph-info activity-icon"></i><div class="activity-text">Sem tarefas ativas.</div></div>`;
 
   return `
+    ${setupBanner}
+    ${quickActions}
     <div class="metrics-row">
       <div class="metric-card green"><div class="metric-label">Tarefas Totais</div><div class="metric-value">${total}</div><div class="metric-sub">${done} concluídas</div></div>
       <div class="metric-card blue"><div class="metric-label">Em Andamento</div><div class="metric-value">${inProg}</div><div class="metric-sub">tarefas ativas</div></div>
@@ -215,15 +246,20 @@ function overview() {
     <div class="overview-grid">
       <div class="card">
         <div class="section-header" style="margin-bottom:1rem">
-          <div><h2>Agentes</h2></div>
+          <div><h2>Agentes</h2><p>Clique para conversar</p></div>
           <button class="btn btn-ghost btn-sm" onclick="OS.navigate('agents')">Ver todos</button>
         </div>
         <div class="agents-status-grid">${agCards}</div>
-        ${!S.settings.apiKey ? `<div style="margin-top:1rem;padding:.75rem;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.2);border-radius:var(--r-md);font-size:.8rem;color:var(--yellow)"><i class="ph ph-warning"></i> Configure sua API Key em <strong>Configurações</strong> para ativar os agentes com IA real.</div>` : ''}
       </div>
-      <div class="card">
-        <div class="section-header" style="margin-bottom:1rem"><div><h2>Atividade Recente</h2></div></div>
-        <div class="activity-list">${recent}</div>
+      <div style="display:flex;flex-direction:column;gap:1.25rem">
+        <div class="card">
+          <div class="section-header" style="margin-bottom:.75rem"><div><h2>Tarefas Ativas</h2></div><button class="btn btn-ghost btn-sm" onclick="OS.navigate('kanban')">Kanban</button></div>
+          <div class="activity-list">${recentTasks}</div>
+        </div>
+        <div class="card">
+          <div class="section-header" style="margin-bottom:.75rem"><div><h2>Deliverables Recentes</h2></div><button class="btn btn-ghost btn-sm" onclick="OS.navigate('deliverables')">Ver todos</button></div>
+          <div class="activity-list">${recentDelivs}</div>
+        </div>
       </div>
     </div>`;
 }
@@ -299,8 +335,9 @@ function agentChat(agId) {
 
 function renderMsg(m, ag) {
   if (m.role === 'user') {
+    const initial = (S.settings.userName||'U')[0].toUpperCase();
     return `<div class="msg user">
-      <div class="msg-avatar" style="background:rgba(10,135,84,.3);color:#12C87A">G</div>
+      <div class="msg-avatar" style="background:linear-gradient(135deg,rgba(10,135,84,.5),rgba(18,200,122,.3));color:#12C87A">${initial}</div>
       <div class="msg-content"><div class="msg-bubble">${esc(m.content)}</div></div>
     </div>`;
   }
@@ -321,11 +358,34 @@ function renderMsg(m, ag) {
   </div>`;
 }
 
-function fmtMd(text) {
-  return esc(text)
+function fmtMd(raw) {
+  // 1. extract fenced code blocks before escaping
+  const blocks = [];
+  let s = raw.replace(/```(\w*)\n?([\s\S]*?)```/g, (_, lang, code) => {
+    blocks.push(`<pre class="md-pre"><code>${esc(code.replace(/\n$/,''))}</code></pre>`);
+    return `\x00B${blocks.length-1}\x00`;
+  });
+  // 2. escape
+  s = esc(s);
+  // 3. markdown rules (order matters)
+  s = s
+    .replace(/^### (.*?)$/gm, '<h4 class="md-h4">$1</h4>')
+    .replace(/^## (.*?)$/gm,  '<h3 class="md-h3">$1</h3>')
+    .replace(/^# (.*?)$/gm,   '<h2 class="md-h2">$1</h2>')
     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-    .replace(/`([^`\n]+)`/g, '<code style="background:rgba(255,255,255,.08);padding:1px 6px;border-radius:4px;font-family:JetBrains Mono,monospace;font-size:.82em">$1</code>')
-    .replace(/\n/g, '<br>');
+    .replace(/\*(.*?)\*/g,     '<em>$1</em>')
+    .replace(/`([^`\n]+)`/g,  '<code class="md-code">$1</code>')
+    .replace(/^&gt; (.*?)$/gm,'<blockquote class="md-bq">$1</blockquote>')
+    .replace(/^---+$/gm,      '<hr class="md-hr">')
+    .replace(/^[-*•] (.*?)$/gm,'<li>$1</li>')
+    .replace(/^\d+\. (.*?)$/gm,'<li>$1</li>');
+  // 4. wrap consecutive <li>
+  s = s.replace(/(<li>.*?<\/li>[\n\r]?)+/g, m => `<ul class="md-ul">${m}</ul>`);
+  // 5. newlines
+  s = s.replace(/\n\n+/g, '<br><br>').replace(/\n/g, '<br>');
+  // 6. restore code blocks
+  blocks.forEach((b, i) => { s = s.replace(`\x00B${i}\x00`, b); });
+  return s;
 }
 
 function initChat(agId) {
@@ -358,41 +418,93 @@ async function sendMessage(agId) {
   input.value = ''; input.style.height = 'auto';
 
   const msgs = $('chatMessages');
-  if (msgs) {
-    msgs.querySelector('.chat-empty')?.remove();
-    msgs.insertAdjacentHTML('beforeend', renderMsg({role:'user',content:text}, ag));
-    msgs.insertAdjacentHTML('beforeend', `
-      <div class="msg assistant" id="typingMsg">
-        <div class="msg-avatar" style="background:${ag.bg};color:${ag.color}">${ag.icon}</div>
-        <div class="msg-content">
-          <div class="typing-indicator">
-            <div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>
-          </div>
-        </div>
-      </div>`);
-    scrollBottom();
-  }
+  msgs?.querySelector('.chat-empty')?.remove();
+  if (msgs) msgs.insertAdjacentHTML('beforeend', renderMsg({role:'user',content:text}, ag));
 
   const btn = $('chatSendBtn');
   if (btn) btn.disabled = true;
 
   let reply;
   if (S.settings.apiKey) {
-    reply = await callClaude(agId);
+    const sid = 'sm' + uid();
+    const userInitial = (S.settings.userName||'U')[0].toUpperCase();
+    msgs?.insertAdjacentHTML('beforeend', `
+      <div class="msg assistant" id="${sid}">
+        <div class="msg-avatar" style="background:${ag.bg};color:${ag.color}">${ag.icon}</div>
+        <div class="msg-content"><div class="msg-bubble" id="${sid}b"><span class="stream-cursor"></span></div></div>
+      </div>`);
+    scrollBottom();
+    reply = await callClaudeStream(agId, null, txt => {
+      const b = $(sid+'b');
+      if (b) { b.innerHTML = fmtMd(txt) + '<span class="stream-cursor"></span>'; scrollBottom(); }
+    });
+    $(sid)?.remove();
   } else {
+    msgs?.insertAdjacentHTML('beforeend', `
+      <div class="msg assistant" id="typingMsg">
+        <div class="msg-avatar" style="background:${ag.bg};color:${ag.color}">${ag.icon}</div>
+        <div class="msg-content"><div class="typing-indicator">
+          <div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>
+        </div></div>
+      </div>`);
+    scrollBottom();
     await new Promise(r => setTimeout(r, 800));
-    reply = `Configure sua **API Key** da Anthropic em Configurações para ativar respostas com IA real.\n\nVocê perguntou: "${text}"`;
+    reply = `⚠️ **API Key não configurada**\n\nVá em **Configurações** e insira sua API Key da Anthropic para ativar todos os agentes com IA.\n\nVocê perguntou: "${text}"`;
+    $('typingMsg')?.remove();
   }
 
-  $('typingMsg')?.remove();
   S.chatHistory[agId].push({ role:'assistant', content:reply });
   save();
-
-  if (msgs) {
-    msgs.insertAdjacentHTML('beforeend', renderMsg({role:'assistant',content:reply}, ag));
-    scrollBottom();
-  }
+  msgs?.insertAdjacentHTML('beforeend', renderMsg({role:'assistant',content:reply}, ag));
+  scrollBottom();
   if (btn) btn.disabled = false;
+}
+
+async function callClaudeStream(agId, overrideMessages, onChunk) {
+  const ag = AGENTS[agId];
+  const messages = overrideMessages || (S.chatHistory[agId]||[]).map(m=>({role:m.role,content:m.content}));
+  const systemPrompt = ag.prompt + getKbContext() +
+    (S.settings.companyDesc ? `\n\nContexto da empresa: ${S.settings.companyDesc}` : '');
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{
+        'x-api-key': S.settings.apiKey,
+        'anthropic-version':'2023-06-01',
+        'content-type':'application/json',
+        'anthropic-dangerous-direct-browser-calls':'true'
+      },
+      body: JSON.stringify({
+        model: S.settings.model||'claude-sonnet-4-6',
+        max_tokens: 2048,
+        stream: true,
+        system: systemPrompt,
+        messages
+      })
+    });
+    const reader = res.body.getReader();
+    const dec = new TextDecoder();
+    let full = '';
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      for (const line of dec.decode(value).split('\n')) {
+        if (!line.startsWith('data: ')) continue;
+        const d = line.slice(6);
+        if (d === '[DONE]') continue;
+        try {
+          const j = JSON.parse(d);
+          if (j.type==='content_block_delta' && j.delta?.type==='text_delta') {
+            full += j.delta.text;
+            onChunk(full);
+          }
+        } catch(e) {}
+      }
+    }
+    return full || 'Sem resposta.';
+  } catch(e) {
+    return `Erro ao conectar: ${e.message}`;
+  }
 }
 
 async function callClaude(agId, overrideMessages) {
@@ -1186,7 +1298,12 @@ function settings() {
           <button class="btn btn-primary" onclick="OS.saveSettings()"><i class="ph ph-floppy-disk"></i> Salvar</button>
         </div>
         <div class="settings-card">
-          <h3>Empresa</h3>
+          <h3>Perfil & Empresa</h3>
+          <div class="form-group">
+            <label class="form-label">Seu nome</label>
+            <input class="form-input" id="settUserName" value="${esc(S.settings.userName||'')}" placeholder="Seu nome">
+            <span class="form-hint">Aparece nos chats com os agentes.</span>
+          </div>
           <div class="form-group">
             <label class="form-label">Nome da empresa</label>
             <input class="form-input" id="settCompany" value="${esc(S.settings.companyName||'')}" placeholder="Konnex">
@@ -1203,10 +1320,11 @@ function settings() {
 }
 
 function saveSettings() {
-  S.settings.apiKey      = $('settApiKey')?.value.trim()  || S.settings.apiKey;
-  S.settings.model       = $('settModel')?.value          || S.settings.model;
-  S.settings.companyName = $('settCompany')?.value.trim() || S.settings.companyName;
-  S.settings.companyDesc = $('settDesc')?.value.trim()    || '';
+  S.settings.apiKey      = $('settApiKey')?.value.trim()    || S.settings.apiKey;
+  S.settings.model       = $('settModel')?.value            || S.settings.model;
+  S.settings.userName    = $('settUserName')?.value.trim()  || S.settings.userName;
+  S.settings.companyName = $('settCompany')?.value.trim()   || S.settings.companyName;
+  S.settings.companyDesc = $('settDesc')?.value.trim()      || '';
   save(); render(); toast('Configurações salvas');
 }
 
