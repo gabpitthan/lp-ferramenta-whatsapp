@@ -1504,7 +1504,7 @@ return {
   openSalesModal, saveSalesCall, viewSalesCall, deleteSalesCall, generateSalesReport,
   openCompetitorModal, saveCompetitor, deleteCompetitor, analyzeCompetitor, analyzeAllCompetitors,
   setKbCategory, openKbModal, saveKbDoc, deleteKbDoc,
-  toggleAutomation, saveSettings,
+  toggleAutomation, saveSettings, init,
 };
 })();
 
